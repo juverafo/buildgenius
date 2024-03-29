@@ -1,0 +1,54 @@
+{% extends 'backoffice.html.twig' %}
+
+{% block title %}Mes produits{% endblock %} {# Titre de la page #}
+
+{% block body %} {# Contenu principal de la page #}
+	<div>
+		{{ form(form) }} {# Affichage du formulaire de produits #}
+	</div>
+	{% if products | length > 0 %} {# Vérification s'il y a des produits à afficher #}
+		<div>
+			<table class="table table-dark"> {# Début du tableau pour afficher les produits #}
+
+				<tr>
+					<th scope="col">Aperçu</th>
+					<th scope="col">#</th>
+					<th scope="col">Produit</th>
+					<th scope="col">Lien</th>
+					<th scope="col">Prix</th>
+					<th scope="col">Description</th>
+					<th scope="col">Catégorie</th>
+					<th scope="col">Revendeur</th>
+					<th scope="col">Actions</th>
+				</tr>
+				{% for product in products %} {# Boucle pour chaque produit à afficher #}
+					<tr>
+						<th>
+							<!-- Afficher toutes les images du produit -->
+							{% for image in product.img %} {# Boucle pour chaque image du produit #}
+								{% if image is not empty %} {# Vérification si l'image existe #}
+									<img src="{{ asset('upload/' ~ image) }}" alt="Image du produit" width="100px"> {# Affichage de l'image du produit #}
+								{% endif %}
+							{% endfor %}
+						</th>
+						<th scope="row">{{ product.id }}</th> {# Affichage de l'identifiant du produit #}
+						<td>{{ product.name }}</td> {# Affichage du nom du produit #}
+						<td>{{ product.link }}</td> {# Affichage du lien du produit #}
+						<td>{{ product.price }}€</td> {# Affichage du prix du produit #}
+						<td>{{ product.description }}</td> {# Affichage de la description du produit #}
+						<td>{{ product.category.name }}</td> {# Affichage de la catégorie du produit #}
+						<td>{{ product.reseller }}</td> {# Affichage du revendeur du produit #}
+						<td>
+							<a href="{{url('admin_product_update', {'id': product.id})}}" class="btn btn-warning">Modifier</a> {# Bouton pour modifier le produit #}
+							<a href="{{url('admin_product_delete', {'id': product.id})}}" class="btn btn-danger" onclick="return confirm('Vous êtes sûr de vouloir supprimer?')">Supprimer</a> {# Bouton pour supprimer le produit #}
+						</td>
+					</tr>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+</div>
+{% else %}
+	<p>Aucun produit pour l'instant</p> {# Message affiché s'il n'y a aucun produit #}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+  {% if app.user %}
+  <p>email: <b>{{ user.email }}</b></p>
+  {% endif %}
+  
+{% endblock %}
