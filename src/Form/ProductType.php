@@ -27,11 +27,13 @@ class ProductType extends AbstractType
             ->add('reseller', TextType::class, [
                 'label' => 'Revendeur',
                 'attr' => array(
-                    'placeholder' => 'Amazon, CDiscount etc...'
-                )
+                    'placeholder' => 'Amazon, CDiscount etc...',
+                ),
+                'required' => false
                 ])
             ->add('link', TextType::class, [
-                'label' => 'Lien'
+                'label' => 'Lien',
+                'required' => false
             ])
             ->add('price', MoneyType::class, [
                 'label' => 'Prix',
@@ -50,7 +52,8 @@ class ProductType extends AbstractType
                 'multiple' => true,
                 'attr' => [
                     'accept' => 'image/*',
-                ]
+                ],
+                'mapped' => true, // Mappé à une propriété de l'entité
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,

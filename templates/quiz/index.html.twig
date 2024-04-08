@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quiz{% endblock %} {# Titre de la page #}
+
+{% block body %} {# Contenu principal de la page #}
+	{# <div>
+		{{ form(form) }}
+	</div> #}
+        <div>
+        <!-- Affichage du tableau des quiz -->
+        <table class="table table-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Type</th>
+            <th scope="col">Action</th>
+        </tr>
+        {% for quiz in quizes %}
+        <tr>
+            <th scope="row">{{ quiz.id }}</th>
+            <td>{{ quiz.type }}</td>
+            <td>
+                <!-- Boutons pour modifier et supprimer une catégorie -->
+                <a href="{{url('admin_quiz_update', {'id': quiz.id})}}" class="btn btn-warning">Modifier</a>
+                <a href="{{url('admin_quiz_delete', {'id': quiz.id})}}" class="btn btn-danger" onclick= "return confirm('Vous êtes sûr de vouloir supprimer?')">Supprimer</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </table>
+        </div>
+{# Lien vers la page de quiz de montage PC #}
+<a href="{{ path('quiz_pc') }}"class="btn btn-primary">Quiz de montage PC</a>
+
+{# Lien vers la page de quiz d'assistance informatique #}
+<a href="{{ path('quiz_support') }}" class="btn btn-secondary">Quiz d'assistance informatique</a>
+{% endblock %}

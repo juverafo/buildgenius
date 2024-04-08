@@ -24,11 +24,11 @@ class Product
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $link = null;
 
-    #[ORM\Column(type: 'text')] 
+    #[ORM\Column(type: 'text')]
     private ?string $description = null;
 
-    #[ORM\Column(type: 'json', nullable: true)]
-    private ?array $img = null;
+    #[ORM\Column(nullable: true)]
+    private ?array $img = [];
 
     #[ORM\ManyToOne(inversedBy: 'category')]
     #[ORM\JoinColumn(nullable: false)]

@@ -24,14 +24,23 @@ class HomeController extends AbstractController
             'products' => $products
         ]);
     }
+    // AFFICHAGE DES DETAILS DES PRODUITS
+    #[Route('/detail/{id}', name: 'app_product_detail')]
+    public function products_detail(ProductRepository $repository, $id)
+    {
+        $product = $repository->find($id);
+
+        return $this->render('product/product_detail.html.twig', [
+            'product' => $product
+        ]);
+    }
     #[Route('/profile/{id}', name: 'profile')]
     public function profile(UserRepository $userRepository, $id): Response
     {
         $user = $userRepository->find($id);
-    
-        return $this->render('home/profile.html.twig',[
+
+        return $this->render('home/profile.html.twig', [
             'user' => $user
         ]);
-    
     }
 }

@@ -12,25 +12,24 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 // Définition du contrôleur ProductController
-#[Route('/admin/product')]
+#[Route('/admin/products')]
 class ProductController extends AbstractController
 {
     // Route pour afficher la liste des produits et gérer la mise à jour d'un produit
     #[Route('/', name: 'admin_product')]
     #[Route('/{id}', name: 'admin_product_update')]
-    public function index(ProductRepository $repository, Request $request, EntityManagerInterface $manager, $id = null): Response
+    public function index(Product $product = null, ProductRepository $repository, Request $request, EntityManagerInterface $manager, $id = null): Response
     {
         // AFFICHAGE OU MISE À JOUR DES PRODUITS
-
         // Récupérer la liste des produits depuis le repository
         $products = $repository->findAll();
 
         // Si un ID est spécifié, récupérer le produit correspondant
-        if ($id) {
-            $product = $repository->find($id);
-        } else {
-            $product = new Product();
-        }
+        // if ($id) {
+        //     $product = $repository->find($id);
+        // } else {
+        //     $product = new Product();
+        // }
 
         // Création du formulaire à partir de ProductType
         $form = $this->createForm(ProductType::class, $product);
@@ -38,24 +37,42 @@ class ProductController extends AbstractController
         // Gestion de la soumission du formulaire
         $form->handleRequest($request);
 
+        $oldImages = $product ? $product->getImg() : [];
+        
         // Vérification de la soumission et de la validité du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
             // Récupération du fichier image
             $imageFiles = $form->get('img')->getData();
-
+            $imageToKeep = [];
+            $imgToDelete = [];
+            
+            if (array_key_exists('checkbox', $request->request->all()) && !empty($request->request->all()['checkbox'])) {
+                $imgToDelete = $request->request->get('checkbox');
+            }
+            // boucle unlik
+            foreach($oldImages as $image) {
+                if(!in_array($image, $imgToDelete)) {
+                    $imageToKeep[] = $image;
+                   // unlink dossier storage
+                }
+            }
             // Génération d'un nom unique pour chaque fichier image et déplacement vers le répertoire d'upload
+            $images = [];
+            
             foreach ($imageFiles as $imageFile) {
-                $imageName = uniqid() . '.' . $imageFile->guessExtension();
+                $imageName = date('Y-m-d-H-i-s') . '-' . uniqid() . '.' . $imageFile->getClientOriginalExtension();
                 $imageFile->move(
                     $this->getParameter('upload_dir'), // Chemin vers le répertoire d'upload
                     $imageName
                 );
-
-                // Stockage du chemin complet du fichier dans l'entité Product
-                $images = $product->getImg() ?? []; // Si aucune image n'est déjà stockée, initialise un tableau vide
-                $images[] = $imageName; // Ajoute le nouveau chemin d'image au tableau
-                $product->setImg($images); // Stocke le tableau mis à jour dans l'entité Product
+                $images[] = $imageName;
+                // Stocke le tableau mis à jour dans l'entité Product
             }
+            foreach ($imageToKeep as $image) {
+                $images[] = $image;
+            }
+            
+            $product->setImg($images); 
 
             // Persistation des données
             $manager->persist($product);
@@ -73,6 +90,7 @@ class ProductController extends AbstractController
         // Rendu de la vue avec les produits et le formulaire
         return $this->render('product/index.html.twig', [
             'products' => $products,
+            'product' => $product,
             'form' => $form->createView()
         ]);
     }
@@ -94,4 +112,5 @@ class ProductController extends AbstractController
         // Redirection vers la liste des produits
         return $this->redirectToRoute('admin_product');
     }
+
 }

@@ -1,0 +1,28 @@
+{% extends 'backoffice.html.twig' %}
+
+{% block title %}Réponses{% endblock %} {# Titre de la page #}
+
+{% block body %} {# Contenu principal de la page #}
+	{# <div>
+		{{ form(form) }}
+	</div> #}
+        <div>
+        <!-- Affichage du tableau des quiz -->
+        <table class="table table-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Réponses</th>
+            <th scope="col">Question</th>
+        </tr>
+        {% for answer in answers %}
+            {# {% if answer.question.id >= 1 and answer.question.id <= 10 %} #}
+        <tr>
+            <th scope="row">{{ answer.id }}</th>
+            <td>{{ answer.answer }}</td>
+            <td>{{ answer.question.id }}</td>
+        </tr>
+            {# {% endif %} #}
+        {% endfor %}
+        </table>
+        </div>
+{% endblock %}

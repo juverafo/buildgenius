@@ -1,0 +1,24 @@
+{% extends "backoffice.html.twig" %}
+
+{% block body %}
+
+  <a class="btn btn-success btn-block" href="{{ path('img_create', {"id": product.id}) }}">Ajouter des images</a>
+
+  <form action="{{ path('delete_img') }}" method="post" class="row justify-content-around border-dark border-2 mt-5 p-3">
+    {% for img in product.img %}
+      <div class="col-md-4">
+          <div class="row">
+            <img src="{{ asset('upload/'~img) }}" width="200" alt="image du produit">
+            <div class="form-check">
+              <input id="imgs" type="checkbox" name="img[]" class="form-check-input" value = "{{ img }}" multiple>
+              <label for="imgs" class="form-check-label">{{ img }}</label>
+            </div>
+          </div>
+      </div>
+    {% endfor %}
+
+  <button class="btn btn-block btn-info mt-5" type="submit">Supprimer les images</button>
+
+  </form>
+
+{% endblock %}

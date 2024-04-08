@@ -40,9 +40,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
+    #[ORM\ManyToMany(targetEntity: Answer::class, inversedBy: 'users')]
+    private Collection $user;
+
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
+        $this->user = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -131,5 +135,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return $this->email;
+    }
+
+    /**
+     * @return Collection<int, Answer>
+     */
+    public function getUser(): Collection
+    {
+        return $this->user;
+    }
+
+    public function addUser(Answer $user): static
+    {
+        if (!$this->user->contains($user)) {
+            $this->user->add($user);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(Answer $user): static
+    {
+        $this->user->removeElement($user);
+
+        return $this;
     }
 }
