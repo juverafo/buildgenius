@@ -5,18 +5,21 @@ namespace App\Controller;
 use App\Entity\Answer;
 use App\Entity\Question;
 use App\Entity\Quiz;
+use App\Entity\User;
 use App\Form\AnswerType;
 use App\Form\QuestionType;
 use App\Form\QuizType;
 use App\Repository\AnswerRepository;
 use App\Repository\QuestionRepository;
 use App\Repository\QuizRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\Length;
 
 #[Route('/quiz')]
 class QuizController extends AbstractController
@@ -136,29 +139,47 @@ class QuizController extends AbstractController
         ]);
     }
     #[Route('/pc', name: 'quiz_pc')]
-    public function pc(Request $request, QuestionRepository $questionRepository, AnswerRepository $answerRepository, Security $security): Response
+    public function pc(Request $request, QuestionRepository $questionRepository, AnswerRepository $answerRepository, EntityManagerInterface $manager): Response
     {
         $questions = $questionRepository->findAll();
         $answers = $answerRepository->findAll();
 
-        // Récupération de l'utilisateur connecté
-        $user = $security->getUser();
-
         // Récupération de l'ID de l'utilisateur
-        $userId = $user ? $user->getId() : null;
-
-        // dd($userId);
+        $user = $this->getUser();
 
         if ($request->getMethod() === 'POST') {
+            if (count($request->request->all()['answers']) < 10) {
+                $this->addFlash('danger', 'Veuillez répondre à toutes les questions, merci!');
+                return $this->redirectToRoute('quiz_pc', ['id' => $id]);
+            }
             // Récupération des réponses envoyées par l'utilisateur
             $userAnswers = $request->request->all()['answers'];
-            dd($userAnswers);
+            foreach ($userAnswers as $answer) {
+                
+                $array = explode('-', $answer);
+                
+                $answerId = substr($array[1], 11);
+                $answer = $answerRepository->find($answerId);
+                
+                //dd($answerId);
+                // Récupérer l'utilisateur et la réponse à partir de leurs IDs
+                // Vérifier si l'utilisateur et la réponse existent
+                $user->addAnswer($answer);
+                // Ajouter la réponse à l'utilisateur et vice versa
+                $manager->persist($user);
+
+                // Enregistrer les changements dans la base de données
+                $manager->flush();
+
+                // Retourner une réponse
+                //return new Response('Réponse ajoutée à l\'utilisateur avec succès.');
+            }
         }
 
         return $this->render('quiz/pc.html.twig', [
             'questions' => $questions,
             'answers' => $answers,
-            'userId' => $userId
+            'user' => $user
         ]);
     }
     #[Route('/support', name: 'quiz_support')]

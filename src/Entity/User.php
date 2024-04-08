@@ -41,12 +41,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\ManyToMany(targetEntity: Answer::class, inversedBy: 'users')]
-    private Collection $user;
+    private Collection $answers;
 
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
-        $this->user = new ArrayCollection();
+        $this->answers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -140,23 +140,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Answer>
      */
-    public function getUser(): Collection
+    public function getAnswers(): Collection
     {
-        return $this->user;
+        return $this->answers;
     }
 
-    public function addUser(Answer $user): static
+    public function addAnswer(Answer $answers): static
     {
-        if (!$this->user->contains($user)) {
-            $this->user->add($user);
+        if (!$this->answers->contains($answers)) {
+            $this->answers->add($answers);
         }
 
         return $this;
     }
 
-    public function removeUser(Answer $user): static
+    public function removeAnswer(Answer $answer): static
     {
-        $this->user->removeElement($user);
+        $this->answers->removeElement($answer);
 
         return $this;
     }

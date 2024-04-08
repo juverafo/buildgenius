@@ -27,15 +27,20 @@ class Product
     #[ORM\Column(type: 'text')]
     private ?string $description = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?array $img = [];
-
     #[ORM\ManyToOne(inversedBy: 'category')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
     #[ORM\Column(type: 'float')]
     private ?float $price = null;
+
+    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'product', cascade: ["persist"])]
+    private Collection $medias;
+
+    public function __construct()
+    {
+        $this->medias = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,18 +95,6 @@ class Product
         return $this;
     }
 
-    public function getImg(): ?array
-    {
-        return $this->img;
-    }
-
-    public function setImg(?array $img): static
-    {
-        $this->img = $img;
-
-        return $this;
-    }
-
     public function getCategory(): ?Category
     {
         return $this->category;
@@ -122,6 +115,36 @@ class Product
     public function setPrice(float $price): static
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Media>
+     */
+    public function getMedias(): Collection
+    {
+        return $this->medias;
+    }
+
+    public function addMedia(Media $media): static
+    {
+        if (!$this->medias->contains($media)) {
+            $this->medias->add($media);
+            $media->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedia(Media $media): static
+    {
+        if ($this->medias->removeElement($media)) {
+            // set the owning side to null (unless already changed)
+            if ($media->getProduct() === $this) {
+                $media->setProduct(null);
+            }
+        }
 
         return $this;
     }

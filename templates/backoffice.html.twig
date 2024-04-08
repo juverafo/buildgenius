@@ -25,7 +25,7 @@
         <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
         <link href="{{ asset('css/sb-admin-2.css') }}" rel="stylesheet">
     {% endblock %}
-
+{% block importmap %}{{ importmap('app') }}{% endblock %}
 </head>
 
 <body id="page-top">
@@ -161,12 +161,12 @@
                 <i class="fas fa-angle-up"></i>
             </a>
         </div>
-        {% block javascripts %}
+  
             {# <!-- Scripts JavaScript --> #}
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.min.js" integrity="sha512-7rusk8kGPFynZWu26OKbTeI+QPoYchtxsmPeBqkHIEXJxeun4yJ4ISYe7C6sz9wdxeE1Gk3VxsIWgCZTc+vX3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
-        {% endblock %}
+ 
     </body>
 </html>

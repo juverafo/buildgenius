@@ -4,6 +4,11 @@
 
 {% block body %} {# Contenu principal de la page #}
 	<div>
+	{% for media in product.medias %}
+
+		
+
+	{% endfor %}
 		{{ form_start(form) }}
 			{{form_row(form.name)}}
 			{{form_row(form.reseller)}}
@@ -11,12 +16,11 @@
 			{{form_row(form.price)}}
 			{{form_row(form.description)}}
 			{{form_row(form.category)}}
-			{{form_row(form.img)}}
+			{# {{form_row(form.img)}} #}
 			{% if product is not null %}
-			{% for i, img in product.img %}
-			<label for="checkbox">Delete {{ img }}</label>
-			<input id={{i}} type="checkbox" name="checkbox[]" class="form-check-input" value="{{ img }}" multiple>
-			{% endfor %}
+			{# {% for i, img in product.img %} #}
+			{# {{dump(i, img)}} #}
+			{# {% endfor %} #}
 			{% endif %}
 		{{ form_end(form) }} {# Affichage du formulaire de produits #}
 	</div>
@@ -39,9 +43,9 @@
 					<tr>
 						<th>
 							<!-- Afficher toutes les images du produit -->
-							{% for image in product.img %} {# Boucle pour chaque image du produit #}
+							{% for image in product.medias %} {# Boucle pour chaque image du produit #}
 								{% if image is not empty %} {# Vérification si l'image existe #}
-									<img src="{{ asset('upload/' ~ image) }}" alt="Image du produit" width="100px"> {# Affichage de l'image du produit #}
+									{# <img src="{{ asset('upload/' ~ image.src) }}" alt="Image du produit" width="100px"> {# Affichage de l'image du produit #}
 								{% endif %}
 							{% endfor %}
 						</th>
