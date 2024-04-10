@@ -1,33 +1,19 @@
 {% extends 'backoffice.html.twig' %}
 
-{% block title %}Mes produits{% endblock %} {# Titre de la page #}
+{% block title %}Gestion des produits
+{% endblock %}
+{# Titre de la page #}
 
-{% block body %} {# Contenu principal de la page #}
-	<div>
-	{% for media in product.medias %}
-
-		
-
-	{% endfor %}
-		{{ form_start(form) }}
-			{{form_row(form.name)}}
-			{{form_row(form.reseller)}}
-			{{form_row(form.link)}}
-			{{form_row(form.price)}}
-			{{form_row(form.description)}}
-			{{form_row(form.category)}}
-			{# {{form_row(form.img)}} #}
-			{% if product is not null %}
-			{# {% for i, img in product.img %} #}
-			{# {{dump(i, img)}} #}
-			{# {% endfor %} #}
-			{% endif %}
-		{{ form_end(form) }} {# Affichage du formulaire de produits #}
-	</div>
-	{% if products | length > 0 %} {# Vérification s'il y a des produits à afficher #}
+{% block body %}
+	{# Contenu principal de la page #}
+	<a href="{{path('admin_product_new')}}" class="btn btn-success mb-4">Créer un produit</a>
+	{# Bouton pour supprimer le produit #}
+	{% if products | length > 0 %}
+		{# Vérification s'il y a des produits à afficher #}
 		<div>
-			<table class="table table-dark"> {# Début du tableau pour afficher les produits #}
-
+			<table
+				class="table table-dark">
+				{# Début du tableau pour afficher les produits #}
 				<tr>
 					<th scope="col">Aperçu</th>
 					<th scope="col">#</th>
@@ -39,34 +25,40 @@
 					<th scope="col">Revendeur</th>
 					<th scope="col">Actions</th>
 				</tr>
-				{% for product in products %} {# Boucle pour chaque produit à afficher #}
+				{% for product in products %}
+					{# Boucle pour chaque produit à afficher #}
 					<tr>
-						<th>
+						<td scope="row">
 							<!-- Afficher toutes les images du produit -->
-							{% for image in product.medias %} {# Boucle pour chaque image du produit #}
-								{% if image is not empty %} {# Vérification si l'image existe #}
-									{# <img src="{{ asset('upload/' ~ image.src) }}" alt="Image du produit" width="100px"> {# Affichage de l'image du produit #}
+							{% for image in product.medias %}
+								{# Boucle pour chaque image du produit #}
+								{% if image is not empty %}
+									{# Vérification si l'image existe #}
+									<img
+									src="{{ asset('upload/' ~ image.src) }}" alt="Image du produit" width="100px">
+								{# Affichage de l'image du produit #}
 								{% endif %}
 							{% endfor %}
-						</th>
-						<th scope="row">{{ product.id }}</th> {# Affichage de l'identifiant du produit #}
-						<td>{{ product.name }}</td> {# Affichage du nom du produit #}
-						<td>{{ product.link }}</td> {# Affichage du lien du produit #}
-						<td>{{ product.price }}€</td> {# Affichage du prix du produit #}
-						<td>{{ product.description }}</td> {# Affichage de la description du produit #}
-						<td>{{ product.category.name }}</td> {# Affichage de la catégorie du produit #}
-						<td>{{ product.reseller }}</td> {# Affichage du revendeur du produit #}
+						</td>
+						<td>{{ product.id }}</td>
+						{# Affichage de l'identifiant du produit #}
+						<td>{{ product.name }}</td>
+						<td>{{ product.link }}</td>
+						<td>{{ product.price }}€</td>
+						<td>{{ product.description }}</td>
+						<td>{{ product.category.name }}</td>
+						<td>{{ product.reseller }}</td>
 						<td>
-							<a href="{{url('admin_product_update', {'id': product.id})}}" class="btn btn-warning">Modifier</a> {# Bouton pour modifier le produit #}
-							<a href="{{url('admin_product_delete', {'id': product.id})}}" class="btn btn-danger" onclick="return confirm('Vous êtes sûr de vouloir supprimer?')">Supprimer</a> {# Bouton pour supprimer le produit #}
+							<div class="btn-group" role="group" aria-label="Actions">
+								<a href="{{url('admin_product_update', {'id': product.id})}}" class="btn btn-warning">Modifier</a>
+								{# Bouton pour modifier le produit #}
+								<a href="{{url('admin_product_delete', {'id': product.id})}}" class="btn btn-danger" onclick="return confirm('Vous êtes sûr de vouloir supprimer?')">Supprimer</a>
+								{# Bouton pour supprimer le produit #}
+							</div>
 						</td>
 					</tr>
-				</td>
-			</tr>
 		{% endfor %}
 	</table>
-</div>
-{% else %}
-	<p>Aucun produit pour l'instant</p> {# Message affiché s'il n'y a aucun produit #}
-{% endif %}
-{% endblock %}
+</div>{% else %}
+<p>Aucun produit pour l'instant</p>
+{# Message affiché s'il n'y a aucun produit #}{% endif %}{% endblock %}

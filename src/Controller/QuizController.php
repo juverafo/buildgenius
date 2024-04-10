@@ -5,25 +5,24 @@ namespace App\Controller;
 use App\Entity\Answer;
 use App\Entity\Question;
 use App\Entity\Quiz;
-use App\Entity\User;
 use App\Form\AnswerType;
 use App\Form\QuestionType;
 use App\Form\QuizType;
 use App\Repository\AnswerRepository;
 use App\Repository\QuestionRepository;
 use App\Repository\QuizRepository;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/quiz')]
 class QuizController extends AbstractController
-{
+{ 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/', name: 'admin_quiz')]
     #[Route('/update/{id}', name: 'admin_quiz_update')]
     public function quiz(QuizRepository $repository, Request $request, EntityManagerInterface $manager, $id = null): Response
@@ -75,6 +74,7 @@ class QuizController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     // SUPPRESSION DES QUIZ
     #[Route('/delete/{id}', name: 'admin_quiz_delete')]
     public function delete(QuizRepository $repository, EntityManagerInterface $manager, $id = null): Response
@@ -91,6 +91,7 @@ class QuizController extends AbstractController
         // Redirection vers la page d'administration des quiz
         return $this->redirectToRoute('admin_quiz');
     }
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/question', name: 'question')]
     public function question(QuestionRepository $repository, Request $request, EntityManagerInterface $manager, $id = null): Response
     {
@@ -138,6 +139,7 @@ class QuizController extends AbstractController
             'questions' => $questions
         ]);
     }
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/pc', name: 'quiz_pc')]
     public function pc(Request $request, QuestionRepository $questionRepository, AnswerRepository $answerRepository, EntityManagerInterface $manager): Response
     {
@@ -150,7 +152,7 @@ class QuizController extends AbstractController
         if ($request->getMethod() === 'POST') {
             if (count($request->request->all()['answers']) < 10) {
                 $this->addFlash('danger', 'Veuillez répondre à toutes les questions, merci!');
-                return $this->redirectToRoute('quiz_pc', ['id' => $id]);
+                return $this->redirectToRoute('quiz_pc');
             }
             // Récupération des réponses envoyées par l'utilisateur
             $userAnswers = $request->request->all()['answers'];
@@ -161,7 +163,6 @@ class QuizController extends AbstractController
                 $answerId = substr($array[1], 11);
                 $answer = $answerRepository->find($answerId);
                 
-                //dd($answerId);
                 // Récupérer l'utilisateur et la réponse à partir de leurs IDs
                 // Vérifier si l'utilisateur et la réponse existent
                 $user->addAnswer($answer);
@@ -171,8 +172,7 @@ class QuizController extends AbstractController
                 // Enregistrer les changements dans la base de données
                 $manager->flush();
 
-                // Retourner une réponse
-                //return new Response('Réponse ajoutée à l\'utilisateur avec succès.');
+                return $this->redirectToRoute('app_home');
             }
         }
 
@@ -182,32 +182,51 @@ class QuizController extends AbstractController
             'user' => $user
         ]);
     }
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/support', name: 'quiz_support')]
-    public function support(Request $request, QuestionRepository $repository, AnswerRepository $answerrepo, Security $security): Response
+    public function support(Request $request, QuestionRepository $questionRepository, AnswerRepository $answerRepository, EntityManagerInterface $manager): Response
     {
-        $questions = $repository->findAll();
-        $answers = $answerrepo->findAll();
-
-        // Récupération de l'utilisateur connecté
-        $user = $security->getUser();
+        $questions = $questionRepository->findAll();
+        $answers = $answerRepository->findAll();
 
         // Récupération de l'ID de l'utilisateur
-        $userId = $user ? $user->getId() : null;
-
-        // dd($userId);
+        $user = $this->getUser();
 
         if ($request->getMethod() === 'POST') {
+            if (count($request->request->all()['answers']) < 10) {
+                $this->addFlash('danger', 'Veuillez répondre à toutes les questions, merci!');
+                return $this->redirectToRoute('quiz_pc');
+            }
             // Récupération des réponses envoyées par l'utilisateur
             $userAnswers = $request->request->all()['answers'];
-            dd($userAnswers);
+            foreach ($userAnswers as $answer) {
+                
+                $array = explode('-', $answer);
+                
+                $answerId = substr($array[1], 11);
+                $answer = $answerRepository->find($answerId);
+                
+                // Récupérer l'utilisateur et la réponse à partir de leurs IDs
+                // Vérifier si l'utilisateur et la réponse existent
+                $user->addAnswer($answer);
+                // Ajouter la réponse à l'utilisateur et vice versa
+                $manager->persist($user);
+
+                // Enregistrer les changements dans la base de données
+                $manager->flush();
+
+                return $this->redirectToRoute('app_home');
+            }
         }
 
         return $this->render('quiz/support.html.twig', [
             'questions' => $questions,
             'answers' => $answers,
-            'userId' => $userId
+            'user' => $user
         ]);
     }
+
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/answer', name: 'answer')]
     public function answer(AnswerRepository $repository, Request $request, EntityManagerInterface $manager, $id = null): Response
     {

@@ -2,98 +2,170 @@
 
 namespace App\Controller;
 
-use App\Entity\Media;
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Repository\MediaRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted("ROLE_ADMIN")]
 // Définition du contrôleur ProductController
 #[Route('/admin/products')]
 class ProductController extends AbstractController
 {
-    // Route pour afficher la liste des produits et gérer la mise à jour d'un produit
     #[Route('/', name: 'admin_product')]
-    #[Route('/{id}', name: 'admin_product_update')]
-    public function index(Product $product = null, ProductRepository $repository, Request $request, EntityManagerInterface $manager): Response
+    public function index(ProductRepository $repository)
     {
-        // AFFICHAGE OU MISE À JOUR DES PRODUITS
         // Récupérer la liste des produits depuis le repository
         $products = $repository->findAll();
 
-        // Si un ID est spécifié, récupérer le produit correspondant
-        if (!$product) {
-            $product = new Product();
-        }
+        // Rendu de la vue avec les produits et le formulaire
+        return $this->render('product/index.html.twig', [
+            'products' => $products
+        ]);
+    }
 
+    #[Route('/{id}/update', name: 'admin_product_update')]
+    public function update(Product $product = null, Request $request, EntityManagerInterface $manager, MediaRepository $mediaRepository): Response
+    {
         // Création du formulaire à partir de ProductType
         $form = $this->createForm(ProductType::class, $product);
-        dd($form);
         // Gestion de la soumission du formulaire
+
         $form->handleRequest($request);
-        
+
         // Vérification de la soumission et de la validité du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
-            $medias = $form->getData()->getMedias();
-            // Récupération des images
+
             $files = $request->files->all()['product']['medias'];
-            $images = [];
-            foreach ($files as $imageFile) {
-                $imageName = date('Y-m-d-H-i-s') . '-' . uniqid() . '.' . $imageFile['src']->getClientOriginalExtension();
-                $imageFile['src']->move(
-                    $this->getParameter('upload_dir'), // Chemin vers le répertoire d'upload
-                    $imageName
-                );
-                //dd($imageName, $imageFile['src']);
-                $images[] = $imageName;
+            $imagesNames = $this->uploadFiles($files);
+            $medias = $product->getMedias();
+            
+        
+            foreach ($medias as $key => $media) {
+                if ($media->getSrc() === null) {
+                    foreach ($imagesNames as $key => $imageName) {
+                        if ($imageName !== null) {
+                            $media->setSrc($imageName);
+                        }
+                    }
+                }
+                $manager->persist($media);
+            }
+            
+            $manager->flush();
+
+            // handle delete file from directory and media from database
+            $mediasToDelete = $mediaRepository->findBy(['product' => null]);
+            foreach ($mediasToDelete as $media) {
+                    $this->deleteUploadedFiles($media->getSrc());
+                $manager->remove($media);
             }
 
-            foreach($medias as $key => $image){
-                $image->setSrc($images[$key]);
-            }
-
-            $manager->persist($product);
-           
-            // Exécution de la transaction
             $manager->flush();
 
             // Ajout d'un message flash de succès
-            $this->addFlash('success', 'Le produit a bien été ajouté');
+            $this->addFlash('success', 'Le produit a bien été modifié');
 
             // Redirection vers la route admin_product
             return $this->redirectToRoute('admin_product');
         }
 
         // Rendu de la vue avec les produits et le formulaire
-        return $this->render('product/index.html.twig', [
-            'products' => $products,
+        return $this->render('product/new.html.twig', [
             'product' => $product,
             'form' => $form->createView()
         ]);
     }
 
-    // Route pour supprimer un produit
-    #[Route('/delete/{id}', name: 'admin_product_delete')]
-    public function delete(ProductRepository $repository, EntityManagerInterface $manager, $id = null): Response
+    #[Route('/new', name: 'admin_product_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Vérification de l'existence de l'ID
-        if ($id) {
-            // Récupération du produit correspondant à l'ID
-            $product = $repository->find($id);
+        $product = new Product();
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $files = $request->files->all()['product']['medias'];
+
+            $imagesNames = $this->uploadFiles($files);
+
+            $medias = $product->getMedias();
+
+            foreach ($medias as $key => $media) {
+                $media->setSrc($imagesNames[$key]);
+            }
+
+            $entityManager->persist($product);
+
+            $entityManager->flush();
+
+            // Ajout d'un message flash de succès
+            $this->addFlash('success', 'Le produit a bien été ajouté');
+
+
+            return $this->redirectToRoute('admin_product');
         }
 
-        // Suppression du produit
-        $manager->remove($product);
-        $manager->flush();
+        return $this->render('product/new.html.twig', [
+            'product' => $product,
+            'form' => $form,
+        ]);
+    }
 
+    // Route pour supprimer un produit
+    #[Route('/delete/{id}', name: 'admin_product_delete')]
+    public function delete(Product $product, EntityManagerInterface $manager): Response
+    {
+        if ($product->getId()) {
+            // Supprimer les médias associés au produit
+            foreach ($product->getMedias() as $media) {
+                $manager->remove($media);
+            }
+            // Supprimer le produit lui-même
+            $manager->remove($product);
+            $manager->flush();
+
+            // Ajout d'un message flash de succès
+            $this->addFlash('success', 'Le produit a bien été supprimé');
+        }
         // Redirection vers la liste des produits
         return $this->redirectToRoute('admin_product');
     }
 
+    private function uploadFiles(array $files, array $imagesNames = []): array
+    {
+        foreach ($files as $imageFile) {
+            if ($imageFile['src'] !== null) {
+                $imageName = date('Y-m-d-H-i-s') . '-' . uniqid() . '.' . $imageFile['src']->getClientOriginalExtension();
+
+                $imageFile['src']->move(
+                    $this->getParameter('upload_dir'), // Chemin vers le répertoire d'upload
+                    $imageName
+                );
+
+                $imagesNames[] = $imageName;
+            } else {
+                $imagesNames[] = $imageFile['src'];
+            }
+        }
+
+        return $imagesNames;
+    }
+
+    public function deleteUploadedFiles(string $file): void
+    {
+        // verify file exists
+        //if (file_exists($this->getParameter('upload_dir') . '/' . $file)) {
+        
+        unlink($this->getParameter('upload_dir') . '/' . $file);
+
+        //}
+    }
 }

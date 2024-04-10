@@ -1,33 +1,72 @@
-{% extends 'base.html.twig' %} {# Étend le modèle de base base.html.twig #}
+{% extends 'base.html.twig' %}
+{# Étend le modèle de base base.html.twig #}
 
-{% block body %} {# Début du bloc body #}
-    {% if app.user %} {# Vérifie si un utilisateur est connecté #}
-        Bonjour <b>{{ app.user.email }}</b> et bienvenue! {# Affiche le courriel de l'utilisateur connecté #}
-    {% endif %}
-    <div class="row justify-content-between"> {# Début d'une rangée avec un espacement entre les éléments #}
-        {% for product in products %} {# Boucle sur chaque produit dans la liste de produits #}
-            <div class="card col-md-3 m-2 p-0"> {# Début d'une carte Bootstrap pour afficher un produit #}
-                {% if product.img|length > 0 %} {# Vérifie s'il y a des images associées au produit #}
-                    {# Afficher la première image du produit #}
-                    {% set firstImage = product.img[0] %} {# Récupère la première image du produit #}
-                    {% if firstImage is not empty %} {# Vérifie si l'image existe #}
-                        <img src="{{ asset('upload/' ~ firstImage) }}" alt="Image du produit" width="250px"> {#Affiche l'image du produit avec un lien vers le répertoire d'upload#}
+{% block body %}
+	{# Début du bloc body #}
+	{% if app.user %}
+		{# Vérifie si un utilisateur est connecté #}
+		Bonjour
+		<b>{{ app.user.email }}</b>
+		et bienvenue!
+		{# Affiche le courriel de l'utilisateur connecté #}
+	{% endif %}
+	<div
+		class="row justify-content-between">
+		{# Début d'une rangée avec un espacement entre les éléments #}
+		{% for product in products %}
+			{# Boucle sur chaque produit dans la liste de produits #}
+			<div class="card col-md-3 m-2 p-0">
+				{# Début d'une carte Bootstrap pour afficher un produit #}
+				{#{% if product.img|length > 0 %} {# Vérifie s'il y a des images associées au produit #}
+				{# Afficher la première image du produit #}
+				{#{% set firstImage = product.img[0] %} {# Récupère la première image du produit #}
+				{#{% if firstImage is not empty %} {# Vérifie si l'image existe #}
+				{#<img src="{{ asset('upload/' ~ firstImage) }}" alt="Image du produit" width="250px"> {#Affiche l'image du produit avec un lien vers le répertoire d'upload#}
+				{#{% endif %}#}
+				{# {% endif %}#}
+					<div
+					class="card-body"> {# Début du corps de la carte #}
+					<h5 class="card-title">{{ product.name }}</h5>
+					{# Affiche le nom du produit #}
+					<p class="card-text">Prix:
+						{{ product.price }}€</p>
+					{# Affiche le prix du produit #}
+					<p class="card-text">Catégorie:
+						{{ product.category.name }}</p>
+					{# Affiche le nom de la catégorie du produit #}
+                    {% if product.reseller == 'BuildGenius' %}
+                    <p class="card-text">Vendeur:
+						{{ product.reseller }}</p>
+					{# Affiche le revendeur du produit #}
+
+                  <div
+						class="text-center">
+						{# Centre les éléments suivants #}
+						<a href="{{ path('app_product_detail', {'id': product.id}) }}" class="btn btn-success mt-2">Détail du produit</a>
+						{# Bouton pour afficher les détails du produit #}
+						<a href="{{ path('add_cart', {'id': product.id, 'target': 'app_products'}) }}" class="btn btn-warning">Ajouter au panier</a>
+					</div>
+                    {% else %}
+                        
+					<p class="card-text">Revendeur:
+						{{ product.reseller }}</p>
+					{# Affiche le revendeur du produit #}
+					<div
+						class="text-center">
+						{# Centre les éléments suivants #}
+						<a href="{{ path('app_product_detail', {'id': product.id}) }}" class="btn btn-success mt-2">Détail du produit</a>
+						{# Bouton pour afficher les détails du produit #}
+					</div>
                     {% endif %}
-                {% endif %}
-                <div class="card-body"> {# Début du corps de la carte #}
-                    <h5 class="card-title">{{ product.name }}</h5> {# Affiche le nom du produit #}
-                    <p class="card-text">Prix: {{ product.price }}€</p> {# Affiche le prix du produit #}
-                    <p class="card-text">Catégorie: {{ product.category.name }}</p> {# Affiche le nom de la catégorie du produit #}
-                    <p class="card-text">Revendeur: {{ product.reseller }}</p> {# Affiche le revendeur du produit #}
-                    <div class="text-center"> {# Centre les éléments suivants #}
-                        <a href="{{ path('app_product_detail', {'id': product.id}) }}" class="btn btn-success mt-2">Détail du produit</a> {# Bouton pour afficher les détails du produit #}
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-{% endblock %} {# Fin du bloc body #}
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}
+{# Fin du bloc body #}
 
-{% block title %} {# Début du bloc title #}
+{% block title %}
+	{# Début du bloc title #}
 
-{% endblock %} {# Fin du bloc title #}
+{% endblock %}
+{# Fin du bloc title #}

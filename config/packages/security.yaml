@@ -23,7 +23,7 @@ security:
                 # where to redirect after logout
                 # target: app_any_route
             user_checker: App\Security\UserChecker
-            # entry_point: App\Security\AccessDeniedHandler
+            entry_point: App\Security\AccessDeniedHandler
             # access_denied_handler: App\Security\AccessDeniedHandler
 
             # activate different ways to authenticate

@@ -6,6 +6,7 @@
 parameters:
     upload_dir: '%kernel.project_dir%/public/upload'
     img_dir: '%kernel.project_dir%/public/img'
+    app_stripe: '%env(APP_STRIPE)%'
 services:
     # default configuration for services in *this* file
     _defaults:

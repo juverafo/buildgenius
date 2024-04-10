@@ -43,10 +43,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Answer::class, inversedBy: 'users')]
     private Collection $answers;
 
+    #[ORM\OneToMany(targetEntity: OrderPurchase::class, mappedBy: 'user')]
+    private Collection $orderPurchases;
+
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
         $this->answers = new ArrayCollection();
+        $this->orderPurchases = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -157,6 +161,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeAnswer(Answer $answer): static
     {
         $this->answers->removeElement($answer);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderPurchase>
+     */
+    public function getOrderPurchases(): Collection
+    {
+        return $this->orderPurchases;
+    }
+
+    public function addOrderPurchase(OrderPurchase $orderPurchase): static
+    {
+        if (!$this->orderPurchases->contains($orderPurchase)) {
+            $this->orderPurchases->add($orderPurchase);
+            $orderPurchase->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderPurchase(OrderPurchase $orderPurchase): static
+    {
+        if ($this->orderPurchases->removeElement($orderPurchase)) {
+            // set the owning side to null (unless already changed)
+            if ($orderPurchase->getUser() === $this) {
+                $orderPurchase->setUser(null);
+            }
+        }
 
         return $this;
     }

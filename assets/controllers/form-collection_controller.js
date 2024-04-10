@@ -31,7 +31,7 @@ export default class extends Controller {
         const element = document.createRange().createContextualFragment(
             this.element.dataset['prototype'].replaceAll('__name__', this.index)
         ).firstElementChild
-        this.addDeleteButton(element)
+        this.addDeleteButton(element, this.index)
         this.index++
         e.currentTarget.insertAdjacentElement('beforebegin', element)
     }
@@ -41,12 +41,16 @@ export default class extends Controller {
      * 
      * @param {HTMLElement} item
      */
-    addDeleteButton = (item) => {
+    addDeleteButton = (item, index) => {
         const btn = document.createElement('button')
         btn.setAttribute('class', 'btn btn-secondary')
         btn.innerText = this.deleteLabelValue || 'Supprimer'
         btn.setAttribute('type', 'button')
         item.append(btn)
+        // On cache le bouton de suppression pour le premier élément
+        if (index === 0) {
+            btn.style.display = 'none'
+        }
         btn.addEventListener('click', e => {
             e.preventDefault()
             item.remove()

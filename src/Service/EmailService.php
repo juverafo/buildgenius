@@ -23,11 +23,10 @@ class EmailService
 
     public function sendEmail($to, $title, $content, $route, $button, $user, $paramName=null, $imgDir=null)
     {
-        //dd($param, $paramName);
         $email = (new TemplatedEmail())
             ->from('arakelyan11@gmail.com')
             ->to($to)
-            ->addPart((new DataPart(fopen( $imgDir.'/logo.jpg', 'r'), 'logo', 'image/jpg'))->asInline())
+            ->addPart((new DataPart(fopen( $imgDir.'/logo_buildgenius.png', 'r'), 'logo_buildgenius', 'image/png'))->asInline())
             //->cc('cc@example.com')
             //->bcc('bcc@example.com')
             //->replyTo('fabien@example.com')

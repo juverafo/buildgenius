@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
-{% block title %}Question de montage PC{% endblock %}
+{% block title %}Question de montage PC
+{% endblock %}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
@@ -8,23 +9,23 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 offset-lg-2">
-                <form action="" method="post">
-                        {% for question in questions %}
-                            {% if question.quiz.id == 2 %}
-                                <p>{{ question.name }}</p>
-                                {% for answer in answers %}
-                                    {% if question.id == answer.question.id %}
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="answers[]" id="answer{{ answer.id }}" value="{{ 'Question: ' ~ question.id ~ ' - ' ~ 'Réponse: ' ~ answer.id }}">
-                                            <label class="form-check-label" for="answer{{ answer.id }}">
-                                                {{ answer.answer }}
-                                            </label>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        {% endfor %}
-                        <button type="submit" class="btn btn-primary">Soumettre</button>
+                <form id="quizForm" action="" method="post">
+                    {% for question in questions %}
+                        {% if question.quiz.id == 1 %}
+                            <p>{{ question.name }}</p>
+                            {% for answer in answers %}
+                                {% if question.id == answer.question.id %}
+                                    <div class="form-check question-{{ question.id }}">
+                                        <input class="form-check-input" type="radio" name="answers[{{ question.id }}]" id="answer{{ answer.id }}" value="{{ 'Question: ' ~ question.id ~ ' - ' ~ 'Réponse: ' ~ answer.id }}">
+                                        <label class="form-check-label" for="answer{{ answer.id }}">
+                                            {{ answer.answer }}
+                                        </label>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary">Soumettre</button>
                 </form>
             </div>
         </div>
@@ -33,4 +34,26 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('quizForm').addEventListener('submit', function(event) {
+            var questions = document.querySelectorAll('[class^=question-]');
+            var answeredQuestions = {};
+
+            questions.forEach(function(question) {
+                var questionId = question.classList[1].replace('question-', '');
+                var selectedAnswer = question.querySelector('input[type="radio"]:checked');
+                if (selectedAnswer) {
+                    answeredQuestions[questionId] = true;
+                }
+            });
+
+            for (var questionId in answeredQuestions) {
+                if (!answeredQuestions[questionId]) {
+                    event.preventDefault(); // Empêche la soumission du formulaire
+                    alert('Veuillez répondre à toutes les questions.');
+                    return;
+                }
+            }
+        });
+    </script>
 {% endblock %}

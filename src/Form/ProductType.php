@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormInterface;
 
 class ProductType extends AbstractType
 {
@@ -45,7 +46,7 @@ class ProductType extends AbstractType
             ->add('description', TextType::class, [
                 'label' => 'Description',
                 'attr' => array(
-                    'placeholder' => "Le processeur Intel Core Comet Lake-S de 10e génération offre plus de cœurs et le multithreading Hyper Threading du Core i3 au Core i9. Avec des fréquences de fonctionnement plus élevées et le même TDP que les générations précédentes, le processeur Intel Core de 10e génération offre plus de performances et de fluidité que jamais auparavant. Le processeur Intel Core i5-10600K avec 6 cœurs (12 threads), 12 Mo de cache et des fréquences turbo allant jusqu'à 4,8 GHz sans overclocking est destiné aux joueurs exigeants et aux utilisateurs qui ont besoin d'une puissance de calcul importante au quotidien."
+                    'placeholder' => "Le processeur Intel Core Comet Lake-S de 10e génération offre ..."
                 )
             ])
             ->add('category', EntityType::class, [
@@ -55,10 +56,10 @@ class ProductType extends AbstractType
             ])
             ->add('medias', CollectionType::class, [
                 'entry_type' => MediaType::class,
+                'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-                'entry_options' => ['label' => false],
                 'attr' => [
                     'data-controller' => 'form-collection'
                 ]

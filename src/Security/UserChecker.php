@@ -9,9 +9,7 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationExc
 class UserChecker implements UserCheckerInterface
 {
     public function checkPreAuth(UserInterface $user): void
-    {
-         // dd(!$user->isActive());
-        
+    {        
          if (!$user instanceof User) {
             return;
         }
