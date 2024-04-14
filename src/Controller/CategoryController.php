@@ -12,75 +12,73 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+// Le contrôleur CategoryController gère les opérations liées aux catégories des produits dans la section d'administration.
 #[IsGranted("ROLE_ADMIN")]
 #[Route('/admin/category')]
 class CategoryController extends AbstractController
 {
+    // Action pour afficher toutes les catégories et permettre leur modification ou ajout.
     #[Route('/', name: 'admin_category')]
     #[Route('/{id}', name: 'admin_category_update')]
     public function index(CategoryRepository $repository, Request $request, EntityManagerInterface $manager, $id=null): Response
     {
-        // AFFICHAGE DES CATEGORIES
-        // récupérer la liste des catégories depuis la base de données
+        // Récupérer toutes les catégories depuis la base de données.
         $categories = $repository->findAll();
 
-        // MODIFICATION D'UNE CATÉGORIE EXISTANTE OU AJOUT D'UNE NOUVELLE CATÉGORIE
+        // Vérifier si un identifiant est fourni, cela signifie qu'on veut modifier une catégorie existante.
+        // Sinon, on crée une nouvelle instance de Category.
         if($id){
-            // Si un identifiant est fourni, cela signifie qu'on veut modifier une catégorie existante
             $category = $repository->find($id);
         } else {
-            // Sinon, on crée une nouvelle instance de Category
             $category = new Category();
         }
         
-        // GÉNÉRATION DU FORMULAIRE
-        // Création du formulaire à partir de la classe CategoryType
+        // Création du formulaire à partir de la classe CategoryType.
         $form = $this->createForm(CategoryType::class, $category);
 
-        // GESTION DE LA REQUÊTE
-        // Analyse de la requête HTTP
+        // Analyse de la requête HTTP.
         $form->handleRequest($request);
  
-        // TRAITEMENT DU FORMULAIRE
-        // Vérification si le formulaire a été soumis et est valide
+        // Vérification si le formulaire a été soumis et est valide.
         if ($form->isSubmitted() && $form->isValid()){
-            // Récupération des données du formulaire
+            // Récupération des données du formulaire.
             $category = $form->getData();
  
-            // Persistation des données en base de données
+            // Persistation des données en base de données.
             $manager->persist($category);
  
-            // Exécution de la transaction
+            // Exécution de la transaction.
             $manager->flush();
 
-            // Ajout d'un message flash pour indiquer que la catégorie a été ajoutée avec succès
+            // Ajout d'un message flash pour indiquer que la catégorie a été ajoutée avec succès.
             $this->addFlash('success', 'La catégorie a bien été ajoutée');
  
-            // Redirection vers la route admin_category
+            // Redirection vers la route admin_category.
             return $this->redirectToRoute('admin_category');
         }
            
-        // RENDU DE LA VUE
+        // Rendu de la vue avec les catégories et le formulaire.
         return $this->render('category/index.html.twig', [
             'categories' => $categories,
             'form' => $form->createView()
         ]);
     }
 
-    // SUPPRESSION DES CATÉGORIES
+    // Action pour supprimer une catégorie.
     #[Route('/delete/{id}', name: 'admin_category_delete')]
     public function delete(CategoryRepository $repository, EntityManagerInterface $manager, $id = null):Response
     {   
+        // Vérifier si un identifiant est fourni pour la catégorie à supprimer.
         if($id){
-            // Récupération de la catégorie à supprimer
+            // Récupération de la catégorie à supprimer.
             $category = $repository->find($id);
         }
         
-        // Suppression de la catégorie
+        // Suppression de la catégorie.
         $manager->remove($category);
         $manager->flush();
         
-        // Redirection vers la page d'administration des catégories
+        // Redirection vers la page d'administration des catégories.
         return $this->redirectToRoute('admin_category');
     }
 }

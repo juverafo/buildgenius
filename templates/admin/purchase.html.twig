@@ -1,0 +1,33 @@
+{% extends 'backoffice.html.twig' %}
+
+{% block title %}Gestion des achats
+{% endblock %}
+
+{% block body %}
+	<table class="table table-dark">
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Email</th>
+				<th scope="col">Status de commande</th>
+				<th scope="col">Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for order in orders %}
+				<tr>
+					<th scope="row">{{ order.user.id }}</th>
+					<td scope="row">{{ order.user.email }}</td>
+					<td scope="row">{{ order.status }}</td>
+					<td scope="row">
+						{% if order.status == 0 %}
+							<a href="{{ url('purchases', {'id' : order.id, 'status': 1 })}}" class="btn btn-danger">Expédiée</a>
+						{% else %}
+							<a href="{{ url('purchases', {'id' : order.id, 'status': 2 }) }}" class="btn btn-success">Livrée</a>
+						{% endif %}
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

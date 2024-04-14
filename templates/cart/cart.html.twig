@@ -42,7 +42,7 @@
     <h3>Montant total: {{ total }}€</h3>
 
         {% if app.user %}
-            <a href="{{ path('app_stripe_pay') }}" class="btn btn-info">Valider ma commande</a>
+            <a href="{{ path('app_stripe_pay') }}" class="btn btn-info" data-turbo="false">Valider ma commande</a>
         {% else %}
             <a href="{{ path('app_login') }}" class="btn btn-success">Se connecter</a>
         {% endif %}

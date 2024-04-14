@@ -2,7 +2,21 @@
 
 {% block body %}
   {% if app.user %}
-  <p>email: <b>{{ user.email }}</b></p>
+        <p>Les commandes passées de <b>{{ user.email }}</b> :</p>
+    {% for orderPurchase in app.user.orderPurchases %}
+      {% for purchase in orderPurchase.purchases %}
+        <p>Service: {{purchase.product.name}}</p>
+        <p>Prix: {{purchase.product.price}}€</p>
+        <p>Quantité: {{purchase.quantity}}</p>
+        {% if orderPurchase.status == 0 %}
+          <p>Status de commande: En cours de traitement	</p>
+          {% elseif orderPurchase.status == 1 %}
+          <p>Status de commande: Expédiée</p>
+          {% else %}
+            <p>Status de commande: Livrée</p>
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
   {% endif %}
   
 {% endblock %}

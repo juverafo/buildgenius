@@ -21,49 +21,50 @@ class SecurityController extends AbstractController
     #[Route('/signup', name: 'app_signup')]
     public function signup(EntityManagerInterface $manager, Request $request, UserPasswordHasherInterface $passwordHasher, EmailService $emailService): Response
     {
-        // on crée une instance de la classe User et à laquelle on passe ces valeurs
+        // Création d'une nouvelle instance de l'entité User
         $user = new User();
 
-        // génération du formulaire à partir de la classe UserType(qui est lié à la classe User)
+        // Création du formulaire d'inscription
         $form = $this->createForm(UserType::class, $user);
 
-        // ici on va gérer la requête entrante
+        // Gestion de la soumission du formulaire
         $form->handleRequest($request);
 
-        // si le form est soumis et valide
+        // Vérification de la soumission et de la validité du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // on récupère les valeurs du formulaire    
+            // Récupération des données du formulaire    
             $user = $form->getData();
 
-            // Encode le mot de passe
+            // Encodage du mot de passe
             $user->setPassword($passwordHasher->hashPassword($user, $form->get('password')->getData()));
 
-            // set de sa prop active à 0
+            // Définition de l'état actif du compte sur 0 (non activé)
             $user->setActive(0);
 
-            // on appelle la méthode generateToken juste en dessous pour générer une chaine de caractère aléatoire et unique
+            // Génération d'un token unique pour l'activation du compte
             $token = $this->generateToken();
 
-            // on l'affecte à notre utilisateur
+            // Attribution du token à l'utilisateur
             $user->setToken($token);
 
-            // on persiste les valeurs (l'ordre n'est pas important avant persiste())
+            // Persistation des données de l'utilisateur
             $manager->persist($user);
 
-            // on exécute la transaction
+            // Exécution de la transaction
             $manager->flush();
 
             // message de confirmation
             $this->addFlash('success', 'Votre compte a bien été créé, allez vite l\'activer');
 
-            // on prépare l'email
+            // Envoi d'un email de confirmation
             $emailService->sendEmail($user->getEmail(), 'Activez votre compte', '<p>Veuillez clicker sur le liens ci-dessous pour confirmer votre inscription</p><p>Si vous n\'êtes pas l\'origine de cette demande merci de ne pas prendre en considération cet email et nous excuser pour la gêne</p>', 'validate_account', 'Activer mon compte', $user, 'token', $this->getParameter('img_dir'));
 
-            // ensuite on redirige vers la route app_login
+            // Redirection vers la page de connexion avec un message de succès
             return $this->redirectToRoute('app_login');
         }
 
+        // Affichage du formulaire d'inscription
         return $this->render('security/signup.html.twig', [
             'form' => $form->createView()
         ]);
@@ -79,11 +80,10 @@ class SecurityController extends AbstractController
     #[Route('/validate-account/{token}', name: 'validate_account')]
     public function validate_account($token, UserRepository $repository, EntityManagerInterface $manager): Response
     {
-        // on va requeter un user sur son token
+        // Recherche de l'utilisateur par son token
         $user = $repository->findOneBy(['token' => $token]);
 
-        // si on a un résultat, on passe sa propriété active à 1, son token à null et on persiste, execute(flush) et redirige sur la page de connexion avec un message de success
-
+        // Si l'utilisateur est trouvé, activation de son compte
         if ($user) {
             $user->setToken(null);
             $user->setActive(1);
@@ -94,21 +94,20 @@ class SecurityController extends AbstractController
             $this->addFlash('danger', 'Une erreur s\'est produite');
         }
 
+        // Redirection vers la page de connexion
         return $this->redirectToRoute('app_login');
     }
 
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
-
-        // get the login error if there is one
+       // Gestion de la connexion utilisateur
+        // Récupération des erreurs de connexion
         $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
+        // Récupération du dernier nom d'utilisateur saisi
         $lastUsername = $authenticationUtils->getLastUsername();
 
+        // Affichage du formulaire de connexion
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error
@@ -118,50 +117,53 @@ class SecurityController extends AbstractController
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {
+        // Cette méthode sera interceptée par la configuration de sécurité pour gérer la déconnexion
+        // Il n'est pas nécessaire de l'implémenter, mais doit être déclarée dans les routes pour fonctionner correctement
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
-    // méthode pour mot de passe oublié pour accéder au formulaire demandant la saisie de l'email et générer l'envoie d'un mail de réinitialisation
-
+    // Méthode pour la réinitialisation du mot de passe
     #[Route('/reset-password', name: 'reset_password')]
     public function reset_password(Request $request, UserRepository $repository, EntityManagerInterface $manager, EmailService $emailService): Response
     {
-        // récupération de la saisie formulaire ->request = $_POST, ->query = $_GET
+        // Récupération de l'email saisi dans le formulaire de demande de réinitialisation de mot de passe (->request = $_POST, ->query = $_GET)
         $email = $request->request->get('email', '');
 
         if (!empty($email)) {
-            // requete de user par son email
+            // Recherche de l'utilisateur par son email
             $user = $repository->findOneBy(['email' => $email]);
 
-            // si on a utilisateur et que son compte est actif on procède à l'envoie de l'email de récupération
+            // Si l'utilisateur est trouvé et que son compte est actif, procéder à l'envoi de l'email de réinitialisation
             if ($user && $user->getActive() === 1) {
                 $user->setActive(0);
-                // on génère un token
+                // Génération d'un token pour la réinitialisation du mot de passe
                 $user->setToken($this->generateToken());
                 $manager->persist($user);
                 $manager->flush();
                 $emailService->sendEmail($user->getEmail(), 'Mot de passe perdu?', '<p>Veuillez clicker sur le liens ci-dessous pour réinitaliser votre mot de passe</p><p>Si vous n\'êtes pas l\'origine de cette demande merci de ne pas prendre en considération cet email et nous excuser pour la gêne</p>', 'new_password', 'Réinitaliser le mot de passe', $user, 'token', $this->getParameter('img_dir'));
 
+                // Redirection avec un message de succès
                 $this->addFlash('success', "Un email de reset vous a été envoyé");
 
                 return $this->redirectToRoute('app_home');
             }
         }
-
-        return $this->render('security/reset_password.html.twig', []);
+        // Affichage du formulaire de réinitialisation de mot de passe
+        return $this->render('security/reset_password.html.twig');
     }
     #[Route('/password/new/{token}', name: 'new_password')]
     public function newPassword($token, UserRepository $repo, Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher)
     {
-        // on récupère un user par son token
+        // Recherche de l'utilisateur par son token
         $user = $repo->findOneBy(['token' => $token]);
 
         if ($user) {
+            // Création du formulaire de saisie du nouveau mot de passe
             $form = $this->createForm(NewPasswordType::class, $user);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                // on hash le nouveau mdp
+                // Hashage du nouveau mot de passe
                 $user->setPassword(
                     $userPasswordHasher->hashPassword(
                         $user,
@@ -169,15 +171,17 @@ class SecurityController extends AbstractController
                     )
                 );
                 $user->setActive(1);
-                // on repasse le token à null
+                // Réinitialisation du token à null
                 $user->setToken(null);
                 $entityManager->persist($user);
                 $entityManager->flush();
                 $this->addFlash('success', "Votre mot de passe a bien été modifié");
 
+                // Redirection vers la page de connexion
                 return $this->redirectToRoute('app_login');
             }
         }
+        // Affichage du formulaire de saisie du nouveau mot de passe
         return $this->render('security/newPassword.html.twig', [
             'form' => $form->createView()
         ]);

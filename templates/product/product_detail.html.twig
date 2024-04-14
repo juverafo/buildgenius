@@ -5,15 +5,15 @@
     <div class=" p-5 m-3 border border-1 rounded border-secondary row justify-content-between">
         <div class="col-md-7 row justify-content-between text-center">
             <div class="col-md-6 card text-center ">
-                {# {% if product.img | length > 0 %} {# Vérifie s'il y a des images associées au produit #}
-                   {#  <img src="{{ asset('upload/'~product.img[0]) }}" width="200" class="img-fluid" id="image" alt="Image du produit"> {# Affiche la première image du produit #}
-                {# {% endif %}#}
+                {# {% if product.img | length > 0 %} Vérifie s'il y a des images associées au produit #}
+                   {# <img src="{{ asset('upload/'~product.img[0]) }}" width="200" class="img-fluid" id="image" alt="Image du produit"> Affiche la première image du produit #}
+                {# {% endif %} #}
             </div>
             <div class="col-md-6" id="gallery">
-                {# {% for image in product.img %}#} {# Boucle sur chaque image associée au produit #}
-                    {#<a href="javascript:setPicture('{{ asset('upload/'~image) }}')">
-                       {#  <img src="{{ asset('upload/'~image) }}" class="img-thumbnail mt-1" width="100" alt="Image du produit"></a> {# Affiche chaque image avec un lien pour changer l'image principale #}
-               {# {% endfor %}#}
+                {# {% for image in product.img %} Boucle sur chaque image associée au produit #}
+                    {# <a href="javascript:setPicture('{{ asset('upload/'~image) }}')"> #}
+                       {# <img src="{{ asset('upload/'~image) }}" class="img-thumbnail mt-1" width="100" alt="Image du produit"></a> Affiche chaque image avec un lien pour changer l'image principale #}
+               {# {% endfor %} #}
             </div>
         </div>
         <div class="col-md-5 border-left border-3 border-left-dark me-5 text-center">

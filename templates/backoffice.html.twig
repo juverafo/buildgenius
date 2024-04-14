@@ -57,7 +57,7 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ path('admin_product') }}">
                     <i class="fas fa-fw fa-wrench"></i>
-                    <span>Gestion composants</span>
+                    <span>Gestion des composants</span>
                 </a>
             </li>
             {# <!-- Divider --> #}
@@ -75,6 +75,20 @@
                 <a class="nav-link collapsed" href="{{ path('users') }}">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Gestion des utilisateurs</span>
+                </a>
+            </li>
+            <hr class="sidebar-divider">
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Gestion des quiz</span>
+                </a>
+            </li>
+            <hr class="sidebar-divider">
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{url("purchases")}}">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Gestion des commandes</span>
                 </a>
             </li>
         </ul>
@@ -115,7 +129,6 @@
                         {# <!-- Bloc de contenu principal spécifique à chaque page --> #}
                         {% block body %}{% endblock %}
                     </div>
-                    {# <!-- /.container-fluid --> #}
                 </div>
                 {# <!-- End of Content Wrapper --> #}
             </div>
