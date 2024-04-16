@@ -1,12 +1,97 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{% endblock %}
+
 {% block body %}
-    {% if app.user %}
-        Hello <b>{{ app.user.email }}</b>
-    {% endif %}
-    
-{% endblock %}
+	<main>
+		<div class="img-bg-header vh-100 d-flex justify-content-center align-items-center flex-column">
+			<div class="position-absolute top-50 start-50 translate-middle text-center text-white">
+				<h1>BuildGenius</h1>
+				<h2 class="lh-base fw-lighter mt-4 darker-bg px-3">Découvrez une expérience informatique sur mesure, où nous vous offrons des solutions personnalisées de montage PC et d'assistance informatique pour répondre à vos besoins uniques. Faites confiance à notre expertise pour transformer votre vision en réalité informatique.</h2>
+			</div>
+		</div>
 
-{% block title %}
+		<section id="services" class="container d-md-flex justify-content-center align-items-center gap-4 my-5">
+			<div class="col-sm-1 col-md-6">
+				<h3 >Montage PC</h3>
+				<div>
+					<div class="row">
+						<p class="col-md-6 m-3">Laissez-nous vous guider pas à pas dans le processus pour déterminer exactement quel type d'ordinateur répond le mieux à vos besoins.</p>
+						<div class="col m-3 container main-bg text-light d-flex justify-content-center align-items-center"><p>Guider par des questions (Quiz)</p></div>
+					</div>
+					<div class="row flex-md-row flex-sm-row-reverse">
+						<div class="col m-3 container main-bg text-light d-flex justify-content-center align-items-center"><p>Choix des composants</p></div>
+						<p class="col-md-6 m-3">Explorez notre sélection complète de composants PC et créez l'ordinateur de vos rêves en choisissant chaque élément selon vos préférences et votre budget.</p>
+					</div>
 
+				</div>
+				<h2 class="font-custom fw-bolder text-center">SERVICES</h2>
+			</div>
+			<div class="">
+			<div class="container m-5">
+				<h2 class="font-custom fw-bolder text-center">MES</h2>
+			</div>
+				<h3>Assistance informatique</h3>
+				<div>
+					<div class="row">
+
+						<p class="col-md-6 m-3">Répondez à quelques questions simples pour nous aider à comprendre rapidement votre problème informatique et à vous fournir la meilleure assistance possible.</p>
+						<div class="col m-3 container secondary-bg text-dark d-flex justify-content-center align-items-center"><p class="text-center">Guider par des questions (Quiz)</p></div>
+
+					</div>
+					<div class="row">
+						<div class="col m-3 container secondary-bg text-dark d-flex justify-content-center align-items-center"><p>Formulaire de contact</p></div>
+						<p class="col-md-6 m-3">Si vous préférez expliquer votre problème de manière détaillée, utilisez notre formulaire de contact pour nous envoyer un message et nous reviendrons vers vous dès que possible pour vous aider.</p>
+					</div>
+
+				</div>
+			</div>
+			<div></div>
+		</section>
+
+		<section class="container d-md-flex gap-3 m-5 w-50 m-auto" id="about">
+		<h2 class='fw-bold text-center font-custom'>A propos</h2>
+		<p class="container">Je me présente, je m'appelle Rafik, et depuis mon enfance, je suis attiré par l'informatique. J'ai toujours été passionné par les ordinateurs, et j'ai même monté mon propre ordinateur personnel, ainsi que ceux de mes proches.
+Avec ce site, mon objectif est de vous proposer les ordinateurs les plus performants possibles, adaptés à vos besoins spécifiques. Que vous soyez un amateur débutant ou un passionné expérimenté, ce site est conçu pour vous. Même si vous n'êtes pas familier avec le monde de l'informatique, vous trouverez ici des outils utiles, comme des quiz, pour vous guider dans la recherche de l'ordinateur unique qui vous convient parfaitement. 
+Ensemble, explorons l'univers fascinant de l'informatique et trouvons l'ordinateur idéal pour vous accompagner dans vos aventures numériques.</p>
+		</section>
+
+		<section class=" img-bg-contact vh-100 d-flex justify-content-center align-items-center flex-column" id="contact">
+			<h2 class="text-center fs-1 text-light">CONTACT</h2>
+			<form action="https://formspree.io/f/mqkrgowe" method="POST" class="container w-50">
+				<div class="row m-3 align-items-end">
+					<label for="name" class="form-label text-light col-auto">Prénom:</label>
+					<input type="name" class="form-control col" id="name" name="name">
+				</div>
+				<div class="row mb-3 align-items-center">
+					<label for="email" class="form-label text-light col-auto">Email:</label>
+					<input type="email" class="form-control col" id="email" name="email">
+				</div>
+				<div class="row mb-3 align-items-center">
+					<label for="message" class="form-label text-light col-auto">Message:</label>
+					<textarea class="form-control col" id="message" name="message"></textarea>
+				</div>
+				<!-- vos autres champs de formulaire vont ici -->
+				<button type="submit" class="btn btn-primary">Envoyer</button>
+			</form>
+
+
+		</section>
+	</div>
+
+	<div class="container my-5" id="faq">
+		<h2 class="font-custom fw-bolder text-center mb-5">F.A.Q</h2>
+
+		<h5>Quels sont les avantages de faire assembler mon PC sur mesure plutôt que d'acheter un PC préfabriqué ?</h5>
+		<p>L'avantage principal de faire assembler un PC sur mesure est que vous pouvez choisir chaque composant en fonction de vos besoins spécifiques, ce qui vous permet d'obtenir un ordinateur parfaitement adapté à vos besoins en termes de performances, de budget et de fonctionnalités.</p>
+		<h5>Quels sont les composants nécessaires pour assembler un PC de bureau ?</h5>
+		<p>Les composants nécessaires pour assembler un PC de bureau incluent un processeur, une carte mère, de la mémoire RAM, un disque dur ou un SSD, une carte graphique (si nécessaire), une alimentation électrique, un boîtier et un système d'exploitation.</p>
+		<h5>Offrez-vous une garantie sur les services de montage ?</h5>
+		<p>Oui, nous offrons une garantie sur nos services de montage PC. Nous nous engageons à assurer le bon fonctionnement de votre ordinateur assemblé sur mesure. En cas de problème, veuillez nous contacter et nous résoudrons rapidement tout dysfonctionnement.</p>
+		<h5>Comment fonctionne le processus d'assistance à distance ?</h5>
+		<p>Pour l'assistance à distance, nous utilisons des logiciels sécurisés qui nous permettent de prendre le contrôle de votre ordinateur à distance pour diagnostiquer et résoudre les problèmes. Vous n'avez qu'à télécharger un petit programme et nous vous guiderons à travers le processus.</p>
+		<h5>Quels sont les tarifs de vos services d'assistance informatique ?</h5>
+		<p>Les tarifs d'assistance informatique varient en fonction de la nature du problème et du type de service demandé. Pour obtenir un devis précis, veuillez nous contacter avec une description détaillée de votre problème.</p>
+	</div>
+</main>
 {% endblock %}

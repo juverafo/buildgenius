@@ -1,34 +1,61 @@
-{% include "include/header.html.twig" %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta
+		charset="UTF-8">
+		<!-- Titre de la page -->
+		<title>BuildGenius</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<!-- Icône de la page -->
+		<link rel="icon" href="{{ asset('img/logo.png') }}" width="32px" height="32px">
+		<!-- Inclusion du framework Bootstrap -->
+		<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+		<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		{% block stylesheets %}{% endblock %}
+
+		
+		<script src="{{ asset('js/bootstrap.bundle.min.js') }}" defer></script>
+
+		{% block javascripts %}
+			{% block importmap %}
+				{{ importmap('app') }}
+			{% endblock %}
+		{% endblock %}
+	</head>
 <body>
 	<!-- Barre de navigation -->
-	<nav class="navbar navbar-expand-lg bg-body-tertiary">
+	<nav class="navbar navbar-expand-lg navbar-dark main-bg">
 		<div
 			class="container-fluid">
 			<!-- Marque de la barre de navigation -->
-			<a class="navbar-brand" href="{{path('app_home')}}">BuildGenius</a>
+			<a class="navbar-brand" href="{{path('app_home')}}"><img src="{{ asset('/img/logo_buildgenius.png')}}" alt="logo BuildGenius" width="50px" class="mx-4"></a>
 			<!-- Bouton de bascule pour les appareils mobiles -->
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
-			<div class="collapse navbar-collapse" id="navbarNavDropdown">
+			<div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
 				<ul
-					class="navbar-nav">
+					class="navbar-nav w-100 justify-content-center pe-5">
 					<!-- Liens de navigation -->
-					<li class="nav-item">
-						<a class="nav-link active" aria-current="page" href="{{path('app_home')}}">Accueil</a>
+					<li class="nav-item px-5">
+						<a class="nav-link text-light" href="{{ path('app_home') }}#services">Services</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">Services</a>
+					<li class="nav-item px-5">
+						<a class="nav-link text-light" href="{{ path('app_home') }}#contact">Contact</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">Contact</a>
+					<li class="nav-item px-5">
+						<a class="nav-link text-light" href="{{ path('app_home') }}#about">À propos</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">À propos</a>
+					<li class="nav-item px-5">
+						<a class="nav-link text-light" href="{{ path('app_home') }}#faq">FAQ</a>
 					</li>
 					{# Affichage du lien Admin si l'utilisateur est un administrateur #}
 					{% if app.user and 'ROLE_ADMIN' in app.user.roles %}
-						<a class="nav-link" href="{{ path('app_admin') }}" role="button">Admin</a>
+						<a class="nav-link text-light" href="{{ path('app_admin') }}" role="button">Admin</a>
 					{% endif %}
 				</ul>
 			</div>
@@ -51,12 +78,12 @@
 					</li>
 				{% else %}
 					<!-- Lien de connexion pour les utilisateurs non connectés -->
-					<li class="nav-item">
-						<a class="nav-link btn btn-warning" href="{{ path('app_login') }}">Connexion</a>
+					<li class="nav-item mx-2">
+						<a class="nav-link btn text-light" href="{{ path('app_login') }}">Connexion</a>
 					</li>
 					<!-- Lien d'inscription pour les utilisateurs non connectés -->
 					<li class="nav-item">
-						<a class="nav-link btn btn-info" href="{{ path('app_signup') }}">Inscription</a>
+						<a class="nav-link btn btn-outline-dark" href="{{ path('app_signup') }}">Inscription</a>
 					</li>
 				{% endif %}
 			</ul>
@@ -64,9 +91,8 @@
 	</nav>
 
 	<!-- Contenu principal -->
-	<div class="container mt-4">
 		<div
-			class="w-50 mx-auto">
+			class=" container w-50 mx-auto">
 			<!-- Affichage des messages flash -->
 			{% for label, msgs in app.flashes %}
 				{% for msg in msgs %}
@@ -76,12 +102,36 @@
 				{% endfor %}
 			{% endfor %}
 		</div>
+	</div>
+	</header>
+
 		<!-- Bloc de contenu principal spécifique à chaque page -->
 		{% block body %}{% endblock %}
-	</div>
+
 	<!-- Scripts -->
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-	{% include "include/footer.html.twig" %}
-</body>
+<footer class="grey-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mt-4">
+                <a href="{{ path('condition') }}" class="text-dark"><p class="fw-bold">Conditions générales</p></a>
+            </div>
+            <div class="col-md-6 text-end mt-4">
+                <a href="{{ path('legal') }}" class="text-dark"><p class="fw-bold">Mentions légales</p></a>
+            </div class="fw-bold">
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <a href="https://www.linkedin.com/in/rafikarakelyan/" class="text-dark" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="https://github.com/juverafo" class="text-dark" target="_blank"><i class="fa-brands fa-github"></i></a>
+                <a href="https://discordapp.com/users/107415153103888384" class="text-dark" target="_blank"><i class="fa-brands fa-discord"></i></a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <p>© 2024 BuildGenius</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body></html>

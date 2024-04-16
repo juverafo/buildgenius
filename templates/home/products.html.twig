@@ -34,30 +34,32 @@
 					<p class="card-text">Catégorie:
 						{{ product.category.name }}</p>
 					{# Affiche le nom de la catégorie du produit #}
-                    {% if product.reseller == 'BuildGenius' %}
-                    <p class="card-text">Vendeur:
-						{{ product.reseller }}</p>
-					{# Affiche le revendeur du produit #}
+					{% if product.reseller == 'BuildGenius' %}
+						<p class="card-text">Vendeur:
+							{{ product.reseller }}</p>
+						{# Affiche le revendeur du produit #}
 
-                  <div
-						class="text-center">
-						{# Centre les éléments suivants #}
-						<a href="{{ path('app_product_detail', {'id': product.id}) }}" class="btn btn-success mt-2">Détail du produit</a>
-						{# Bouton pour afficher les détails du produit #}
-						<a href="{{ path('add_cart', {'id': product.id, 'target': 'app_products'}) }}" class="btn btn-warning">Ajouter au panier</a>
-					</div>
-                    {% else %}
-                        
-					<p class="card-text">Revendeur:
-						{{ product.reseller }}</p>
-					{# Affiche le revendeur du produit #}
-					<div
-						class="text-center">
-						{# Centre les éléments suivants #}
-						<a href="{{ path('app_product_detail', {'id': product.id}) }}" class="btn btn-success mt-2">Détail du produit</a>
-						{# Bouton pour afficher les détails du produit #}
-					</div>
-                    {% endif %}
+						<div
+							class="text-center">
+							{# Centre les éléments suivants #}
+							<a href="{{ path('app_product_detail', {'id': product.id}) }}" class="btn btn-success mt-2">Détail du produit</a>
+							{% if app.user %}
+								{# Bouton pour afficher les détails du produit #}
+								<a href="{{ path('add_cart', {'id': product.id, 'target': 'app_products'}) }}" class="btn btn-warning">Ajouter au panier</a>
+							{% endif %}
+						</div>
+					{% else %}
+
+						<p class="card-text">Revendeur:
+							{{ product.reseller }}</p>
+						{# Affiche le revendeur du produit #}
+						<div
+							class="text-center">
+							{# Centre les éléments suivants #}
+							<a href="{{ path('app_product_detail', {'id': product.id}) }}" class="btn btn-success mt-2">Détail du produit</a>
+							{# Bouton pour afficher les détails du produit #}
+						</div>
+					{% endif %}
 				</div>
 			</div>
 		{% endfor %}
