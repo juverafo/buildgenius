@@ -2,61 +2,63 @@
 
 {% block body %}
     {% if cart is not empty %}
-    <a href="{{ path('destroy_cart') }}" class="btn btn-success btn-lg w-100 m-4">Vider le panier</a>
-    <table class="table table-dark table-striped mt-5 w-75 mx-auto">
-        <thead>
-        <tr>
-            <th>Produit</th>
-            <th>Prix unitaire</th>
-            <th>Catégorie</th>
-            <th>Aperçu</th>
-            <th class="text-center">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-            {% for detail in cart %}
-            <tr>
-                <td>{{ detail.product.name }}</td>
-                <td>{{ detail.product.price }}€</td>
-                <td>{{ detail.product.category.name }}</td>
-                <td>
-                {% if detail.product.medias | length > 0 %}
-                <img src="{{ asset('upload/'~detail.product.medias[0].src) }}" width="90" alt="">
+        <div class="container">
+            <a href="{{ path('destroy_cart') }}" class="btn btn-success btn-lg btn-block my-4">Vider le panier</a>
+            <div class="table-responsive mt-3">
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th>Produit</th>
+                            <th>Prix unitaire</th>
+                            <th>Catégorie</th>
+                            <th>Aperçu</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for detail in cart %}
+                            <tr>
+                                <td>{{ detail.product.name }}</td>
+                                <td>{{ detail.product.price }}€</td>
+                                <td>{{ detail.product.category.name }}</td>
+                                <td>
+                                    {% if detail.product.medias | length > 0 %}
+                                        <img src="{{ asset('upload/'~detail.product.medias[0].src) }}" width="90" alt="">
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <a href="{{ path('remove_cart', {'id': detail.product.id, 'target': 'cart'}) }}" class="btn btn-light text-dark btn-sm">-</a>
+                                        <input class="rounded w-25 fw-bold text-center mx-1" type="text" value="{{ detail.quantity }}" readonly>
+                                        <a href="{{ path('add_cart', {'id': detail.product.id, 'target': 'cart'}) }}" class="btn btn-light text-dark btn-sm">+</a>
+                                    </div>
+                                    <a href="{{ path('delete_cart', {'id': detail.product.id}) }}" class="d-block mx-auto mt-2 btn btn-warning btn-block">Retirer du panier</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center mt-3">
+                <h3>Montant total: {{ total }}€</h3>
+                {% if app.user %}
+                    <a href="{{ path('app_stripe_pay') }}" class="btn btn-info btn-lg btn-block my-3" data-turbo="false">Valider ma commande</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="btn btn-success btn-lg btn-block">Se connecter</a>
                 {% endif %}
-                </td>
-                <td class="text-center  ">
-                    <a href="{{ path('remove_cart', {'id': detail.product.id, 'target': 'cart'}) }}" class="btn btn-light text-dark">-</a>
-                    <input class="rounded w-25 fw-bold text-center" type="text" value="{{ detail.quantity }}" readonly>
-                    <a href="{{ path('add_cart', {'id': detail.product.id, 'target': 'cart'}) }}"
-                       class="btn btn-light text-dark">+</a>
-
-                    <a href="{{ path('delete_cart', {'id': detail.product.id}) }}"
-                       class="d-block mx-auto mt-1 w-50 btn btn-warning ">Retirer du panier</a>
-
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <h3>Montant total: {{ total }}€</h3>
-
-        {% if app.user %}
-            <a href="{{ path('app_stripe_pay') }}" class="btn btn-info" data-turbo="false">Valider ma commande</a>
-        {% else %}
-            <a href="{{ path('app_login') }}" class="btn btn-success">Se connecter</a>
-        {% endif %}
-
+            </div>
+        </div>
     {% else %}
-      <h3 class="text-center">Votre panier est vide</h3>
+        <div class="container my-3">
+            <h3 class="text-center">Votre panier est vide</h3>
+        </div>
     {% endif %}
-
-
 {% endblock %}
-     {% block javascripts %}
-         <script src="https://js.stripe.com/v3/"></script>
-     {% endblock %}
+
+{% block javascripts %}
+    <script src="https://js.stripe.com/v3/"></script>
+{% endblock %}
+
 {% block title %}
 
 {% endblock %}
-

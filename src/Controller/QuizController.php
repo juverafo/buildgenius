@@ -162,6 +162,8 @@ class QuizController extends AbstractController
                 $manager->persist($user);
                 // Enregistre les changements dans la base de données
                 $manager->flush();
+                // Ajoute un message flash d'avertissement
+                $this->addFlash('success', 'Merci d\'avoir répondu aux questions. Je vous contacterai dès que possible.');
                 // Redirige l'utilisateur vers la page d'accueil
                 return $this->redirectToRoute('app_home');
             }
@@ -210,6 +212,8 @@ class QuizController extends AbstractController
                 $manager->persist($user);
                 // Enregistre les changements dans la base de données
                 $manager->flush();
+                // Ajoute un message flash d'avertissement
+                $this->addFlash('success', 'Merci d\'avoir répondu aux questions. Je vous contacterai dès que possible.');
                 // Redirige l'utilisateur vers la page d'accueil
                 return $this->redirectToRoute('app_home');
             }
@@ -266,15 +270,14 @@ class QuizController extends AbstractController
         ]);
     }
 
-    // #[Route('/results', name: 'quiz_results')]
-    // public function quiz_results(Request $request)
-    // {
-    //     $user = $this->getUser();
-    //     $userAnswers = $request->request->all();
-    //     dd($userAnswers);
-        
-    //     return $this->render('admin/quiz_results.html.twig', [
-    //         'userAnswers' => $userAnswers
-    //     ]);
-    // }
+    #[Route('/results', name: 'quiz_results')]
+    public function quiz_results(Request $request)
+    {
+
+        $userAnswers = $request->request->all();
+
+        return $this->render('admin/quiz_results.html.twig', [
+            'userAnswers' => $userAnswers
+        ]);
+    }
 }

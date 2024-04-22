@@ -5,20 +5,21 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="BuildGenius propose des services de montage PC personnalisé et d'assistance informatique, accompagnés de quiz interactifs pour aider nos clients à trouver exactement ce qu'ils cherchent. Découvrez notre sélection minutieuse de composants PC à des prix compétitifs, avec des liens vers des revendeurs fiables. Transformez votre vision informatique en réalité avec BuildGenius.">
+	<meta name="keywords" content="Montage PC, Assistance informatique, Quiz PC, Quiz Assistance informatique, Composant PC, Ordinateur sur mesure, Sélection de composants, Assistance à distance, Solutions informatique personnalisées">
+	<meta name="author" content="BuildGenius">
     {# <!-- Titre de la page --> #}
     <title>
         {% block title %}
-            BuildGenius
+
         {% endblock %}
     </title>
 
     {% block stylesheet %}
         {# <!-- Feuilles de style --> #}
         {# <!-- Custom fonts for this template--> #}
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css" integrity="sha512-rt/SrQ4UNIaGfDyEXZtNcyWvQeOq0QLygHluFQcSjaGB04IxWhal71tKuzP6K8eYXYB6vJV4pHkXcmFGGQ1/0w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+        {# <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css" integrity="sha512-rt/SrQ4UNIaGfDyEXZtNcyWvQeOq0QLygHluFQcSjaGB04IxWhal71tKuzP6K8eYXYB6vJV4pHkXcmFGGQ1/0w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"> #}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.3.1/css/all.min.css" integrity="sha512-KulI0psuJQK8UMpOeiMLDXJtGOZEBm8RZNTyBBHIWqoXoPMFcw+L5AEo0YMpsW8BfiuWrdD1rH6GWGgQBF59Lg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
         {# <!-- Vos feuilles de style personnalisées --> #}
         <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
@@ -33,10 +34,10 @@
         {# <!-- Sidebar --> #}
         <ul class="navbar-nav  text-white sidebar sidebar-dark accordion" id="accordionSidebar" style="background-color: #000000;">
             {# <!-- Sidebar - Brand --> #}
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ path('app_admin') }}">
                 <div class="sidebar-brand-icon">
                     {# <!-- Icône ou logo de la barre latérale --> #}
-                    <img src="{{asset('img/logo.png')}}" alt="logo" width="50px">
+                    <img src="{{asset('img/logo_buildgenius.png')}}" alt="logo" width="50px">
                 </div>
                 <div class="sidebar-brand-text mx-3">BuildGenius</div>
             </a>
@@ -79,14 +80,14 @@
             </li>
             <hr class="sidebar-divider">
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#">
+                <a class="nav-link collapsed" href="{{ path('quiz_results') }}">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Gestion des quiz</span>
                 </a>
             </li>
             <hr class="sidebar-divider">
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{{url("purchases")}}">
+                <a class="nav-link collapsed" href="{{ path("purchases") }}">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Gestion des commandes</span>
                 </a>
@@ -140,9 +141,9 @@
         </div>
   
             {# <!-- Scripts JavaScript --> #}
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.min.js" integrity="sha512-7rusk8kGPFynZWu26OKbTeI+QPoYchtxsmPeBqkHIEXJxeun4yJ4ISYe7C6sz9wdxeE1Gk3VxsIWgCZTc+vX3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-            <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+            {# // <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            // <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.min.js" integrity="sha512-7rusk8kGPFynZWu26OKbTeI+QPoYchtxsmPeBqkHIEXJxeun4yJ4ISYe7C6sz9wdxeE1Gk3VxsIWgCZTc+vX3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            // <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            // <script src="{{ asset('js/sb-admin-2.min.js') }}"></script> #}
     </body>
 </html>

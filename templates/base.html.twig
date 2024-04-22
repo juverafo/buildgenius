@@ -1,23 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 	<head>
-		<meta
-		charset="UTF-8">
+		<meta charset="UTF-8">
 		<!-- Titre de la page -->
 		<title>BuildGenius</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta name="description" content="">
-		<meta name="author" content="">
+		<meta name="description" content="BuildGenius propose des services de montage PC personnalisé et d'assistance informatique, accompagnés de quiz interactifs pour aider nos clients à trouver exactement ce qu'ils cherchent. Découvrez notre sélection minutieuse de composants PC à des prix compétitifs, avec des liens vers des revendeurs fiables. Transformez votre vision informatique en réalité avec BuildGenius.">
+		<meta name="keywords" content="Montage PC, Assistance informatique, Quiz PC, Quiz Assistance informatique, Composant PC, Ordinateur sur mesure, Sélection de composants, Assistance à distance, Solutions informatique personnalisées">
+		<meta name="author" content="BuildGenius">
+
 		<!-- Icône de la page -->
-		<link rel="icon" href="{{ asset('img/logo.png') }}" width="32px" height="32px">
+		<link
+		rel="icon" href="{{ asset('img/logo.png') }}" width="32px" height="32px">
 		<!-- Inclusion du framework Bootstrap -->
 		<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 		<link rel="stylesheet" href="{{ asset('css/style.css') }}">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer"/> 
+		<link href="https://fonts.googleapis.com/css2?family=Koulen&display=swap" rel="stylesheet">
 		{% block stylesheets %}{% endblock %}
-
 		
+
+
 		<script src="{{ asset('js/bootstrap.bundle.min.js') }}" defer></script>
 
 		{% block javascripts %}
@@ -26,71 +30,72 @@
 			{% endblock %}
 		{% endblock %}
 	</head>
-<body>
-	<!-- Barre de navigation -->
-	<nav class="navbar navbar-expand-lg navbar-dark main-bg">
-		<div
-			class="container-fluid">
-			<!-- Marque de la barre de navigation -->
-			<a class="navbar-brand" href="{{path('app_home')}}"><img src="{{ asset('/img/logo_buildgenius.png')}}" alt="logo BuildGenius" width="50px" class="mx-4"></a>
-			<!-- Bouton de bascule pour les appareils mobiles -->
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
-				<ul
-					class="navbar-nav w-100 justify-content-center pe-5">
-					<!-- Liens de navigation -->
-					<li class="nav-item px-5">
-						<a class="nav-link text-light" href="{{ path('app_home') }}#services">Services</a>
-					</li>
-					<li class="nav-item px-5">
-						<a class="nav-link text-light" href="{{ path('app_home') }}#contact">Contact</a>
-					</li>
-					<li class="nav-item px-5">
-						<a class="nav-link text-light" href="{{ path('app_home') }}#about">À propos</a>
-					</li>
-					<li class="nav-item px-5">
-						<a class="nav-link text-light" href="{{ path('app_home') }}#faq">FAQ</a>
-					</li>
-					{# Affichage du lien Admin si l'utilisateur est un administrateur #}
-					{% if app.user and 'ROLE_ADMIN' in app.user.roles %}
-						<a class="nav-link text-light" href="{{ path('app_admin') }}" role="button">Admin</a>
+	<body>
+		<!-- Barre de navigation -->
+		<nav class="navbar navbar-expand-lg navbar-dark main-bg">
+			<div
+				class="container-fluid">
+				<!-- Marque de la barre de navigation -->
+				<a class="navbar-brand" href="{{path('app_home')}}"><img src="{{ asset('/img/logo_buildgenius.png')}}" alt="logo BuildGenius" width="50px" class="mx-4"></a>
+				<!-- Bouton de bascule pour les appareils mobiles -->
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="navbar-collapse collapse justify-content-between" id="navbarNavDropdown">
+					<ul class="navbar-nav w-100 justify-content-center pe-5">
+						<!-- Liens de navigation -->
+						<li class="nav-item px-5">
+							<a class="nav-link text-light" href="{{ path('app_home') }}#services">Services</a>
+						</li>
+						<li class="nav-item px-5">
+							<a class="nav-link text-light" href="{{ path('app_home') }}#contact">Contact</a>
+						</li>
+						<li class="nav-item px-5">
+							<a class="nav-link text-light" href="{{ path('app_home') }}#about">À propos</a>
+						</li>
+						<li class="nav-item px-5">
+							<a class="nav-link text-light" href="{{ path('app_home') }}#faq">FAQ</a>
+						</li>
+						{# Affichage du lien Admin si l'utilisateur est un administrateur #}
+						{% if app.user and 'ROLE_ADMIN' in app.user.roles %}
+							<li class="nav-item px-5">
+								<a class="nav-link text-light" href="{{ path('app_admin') }}">Admin</a>
+							</li>
+						{% endif %}
+					</ul>
+				</div>
+			</div>
+			<!-- Menu utilisateur -->
+			<div class="navbar-collapse collapse w-400 order-3 dual-collapse2" id="navbarNavDropdown">
+				<ul class="navbar-nav ml-auto">
+					{% if app.user %}
+						<!-- Lien vers le panier -->
+						<li class="nav-item ms-5">
+							<a href="{{ path('cart') }}" class="btn secondary-bg">Panier</a>
+						</li>
+						<!-- Lien vers le profil de l'utilisateur connecté -->
+						<li class="nav-item">
+							<a class="nav-link btn text-light" href="{{path('profile', {id: app.user.id})}}">Profil</a>
+						</li>
+						<!-- Lien de déconnexion pour l'utilisateur connecté -->
+						<li class="nav-item">
+							<a class="nav-link btn btn-outline-dark" href="{{ path('app_logout') }}">Déconnexion</a>
+						</li>
+					{% else %}
+						<!-- Lien de connexion pour les utilisateurs non connectés -->
+						<li class="nav-item mx-2">
+							<a class="nav-link btn text-light" href="{{ path('app_login') }}">Connexion</a>
+						</li>
+						<!-- Lien d'inscription pour les utilisateurs non connectés -->
+						<li class="nav-item">
+							<a class="nav-link btn btn-outline-dark" href="{{ path('app_signup') }}">Inscription</a>
+						</li>
 					{% endif %}
 				</ul>
 			</div>
-		</div>
-		<!-- Menu utilisateur -->
-		<div class="navbar-collapse collapse w-400 order-3 dual-collapse2">
-			<ul class="navbar-nav ml-auto">
-				{% if app.user %}
-					<!-- Lien vers le panier -->
-					<li class="nav-item ms-5 text-end">
-						<a href="{{ path('cart') }}" class="btn btn-warning">Panier</a>
-					</li>
-					<!-- Lien vers le profil de l'utilisateur connecté -->
-					<li class="nav-item">
-						<a class="nav-link btn btn-warning" href="{{path('profile', {id: app.user.id})}}">Profil</a>
-					</li>
-					<!-- Lien de déconnexion pour l'utilisateur connecté -->
-					<li class="nav-item">
-						<a class="nav-link btn btn-warning" href="{{ path('app_logout') }}">Déconnexion</a>
-					</li>
-				{% else %}
-					<!-- Lien de connexion pour les utilisateurs non connectés -->
-					<li class="nav-item mx-2">
-						<a class="nav-link btn text-light" href="{{ path('app_login') }}">Connexion</a>
-					</li>
-					<!-- Lien d'inscription pour les utilisateurs non connectés -->
-					<li class="nav-item">
-						<a class="nav-link btn btn-outline-dark" href="{{ path('app_signup') }}">Inscription</a>
-					</li>
-				{% endif %}
-			</ul>
-		</div>
-	</nav>
+		</nav>
 
-	<!-- Contenu principal -->
+		<!-- Contenu principal -->
 		<div
 			class=" container w-50 mx-auto">
 			<!-- Affichage des messages flash -->
@@ -102,36 +107,35 @@
 				{% endfor %}
 			{% endfor %}
 		</div>
+	</body>
+</html></div></header><!-- Bloc de contenu principal spécifique à chaque page -->{% block body %}{% endblock %}<!-- Scripts --><footer class="grey-bg"><div class="container">
+<div class="row">
+	<div class="col-md-6 mt-4">
+		<a href="{{ path('condition') }}" class="text-dark">
+			<p class="fw-bold">Conditions générales</p>
+		</a>
 	</div>
-	</header>
-
-		<!-- Bloc de contenu principal spécifique à chaque page -->
-		{% block body %}{% endblock %}
-
-	<!-- Scripts -->
-<footer class="grey-bg">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 mt-4">
-                <a href="{{ path('condition') }}" class="text-dark"><p class="fw-bold">Conditions générales</p></a>
-            </div>
-            <div class="col-md-6 text-end mt-4">
-                <a href="{{ path('legal') }}" class="text-dark"><p class="fw-bold">Mentions légales</p></a>
-            </div class="fw-bold">
-        </div>
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <a href="https://www.linkedin.com/in/rafikarakelyan/" class="text-dark" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-                <a href="https://github.com/juverafo" class="text-dark" target="_blank"><i class="fa-brands fa-github"></i></a>
-                <a href="https://discordapp.com/users/107415153103888384" class="text-dark" target="_blank"><i class="fa-brands fa-discord"></i></a>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <p>© 2024 BuildGenius</p>
-            </div>
-        </div>
-    </div>
-</footer>
-
-</body></html>
+	<div class="col-md-6 text-end mt-4">
+		<a href="{{ path('legal') }}" class="text-dark">
+			<p class="fw-bold">Mentions légales</p>
+		</a>
+	</divclass="fw-bold">
+</div>
+<div class="row">
+	<div class="col-md-12 text-center">
+		<a href="https://www.linkedin.com/in/rafikarakelyan/" class="text-dark" target="_blank">
+			<i class="fa-brands fa-linkedin"></i>
+		</a>
+		<a href="https://github.com/juverafo" class="text-dark" target="_blank">
+			<i class="fa-brands fa-github"></i>
+		</a>
+		<a href="https://discordapp.com/users/107415153103888384" class="text-dark" target="_blank">
+			<i class="fa-brands fa-discord"></i>
+		</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12 text-center">
+		<p>© 2024 BuildGenius</p>
+	</div>
+</div></div></footer></body></html>

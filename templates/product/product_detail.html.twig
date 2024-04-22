@@ -1,19 +1,16 @@
 {% extends 'base.html.twig' %} {# Étend le modèle de base base.html.twig #}
 
 {% block body %} {# Début du bloc body #}
-
-    <div class=" p-5 m-3 border border-1 rounded border-secondary row justify-content-between">
+    <div class="p-5 m-3 border border-1 rounded border-secondary row justify-content-between">
         <div class="col-md-7 row justify-content-between text-center">
-            <div class="col-md-6 card text-center ">
-                {# {% if product.img | length > 0 %} Vérifie s'il y a des images associées au produit #}
-                   {# <img src="{{ asset('upload/'~product.img[0]) }}" width="200" class="img-fluid" id="image" alt="Image du produit"> Affiche la première image du produit #}
-                {# {% endif %} #}
+            <div class="col-md-6 card text-center">
+                   <img src="{{ asset('upload/'~product.medias[0].src) }}" width="200" class="img-fluid" id="preview" alt="Image du produit"> {# Affiche la première image du produit #}
             </div>
-            <div class="col-md-6" id="gallery">
-                {# {% for image in product.img %} Boucle sur chaque image associée au produit #}
-                    {# <a href="javascript:setPicture('{{ asset('upload/'~image) }}')"> #}
-                       {# <img src="{{ asset('upload/'~image) }}" class="img-thumbnail mt-1" width="100" alt="Image du produit"></a> Affiche chaque image avec un lien pour changer l'image principale #}
-               {# {% endfor %} #}
+            <div class="col-md-6 flex flex-column">
+                {% for image in product.medias %} {# Boucle sur chaque image associée au produit #}
+                <img src="{{ asset('upload/'~image.src) }}" class="img-thumbnail mt-1" width="100" alt="Image du produit">
+                {# Affiche chaque image avec un lien pour changer l'image principale #}
+                {% endfor %}
             </div>
         </div>
         <div class="col-md-5 border-left border-3 border-left-dark me-5 text-center">
@@ -26,29 +23,18 @@
             <p>{{ product.description }}</p> {# Affiche la description du produit #}
         </div>
     </div>
+    
 
     <script>
-        let gallery=document.getElementById('gallery'); // Sélectionne l'élément avec l'ID 'gallery'
-        let img=document.getElementById('image'); // Sélectionne l'élément avec l'ID 'image'
+        let gallery = document.querySelectorAll(".img-thumbnail");
 
-        gallery.addEventListener('click', changePhoto); // Ajoute un écouteur d'événements pour cliquer sur l'élément de la galerie
-
-        function changePhoto(e) // Définit la fonction pour changer la photo principale
-
-            clearStyle(); // Appelle la fonction pour supprimer les styles des images miniatures 
-
-            img.src = e.target.src; // Change la source de l'image principale en cliquant sur une miniature 
-            e.target.style.border='2px solid black'; // Ajoute une bordure à l'image miniature cliquée
-        }
-
-        function clearStyle() // Définit la fonction pour supprimer les styles des images miniatures
-            let imgs= document.getElementsByClassName('img-thumbnail'); // Sélectionne toutes les images miniatures
-            for (let img of imgs) // Boucle sur chaque image miniature
-                img.style.removeProperty('border'); // Supprime la bordure de chaque image miniature
-            }
-        }
-        function setPicture(le_chemin_de_limage){ // Définit la fonction pour définir l'image principale en fonction du chemin passé en paramètre 
-            img.src = le_chemin_de_limage // Définit la source de l'image principale #}
+        let preview = document.getElementById('preview'); // Sélectionne l'élément avec l'ID 'image'
+        for (let i = 0; i < gallery.length; i++){
+            let imgSrc = gallery[i]
+            imgSrc.addEventListener('click', e => {
+                preview.src = "";
+                preview.src = e.target.src
+            })
         }
     </script> 
 
