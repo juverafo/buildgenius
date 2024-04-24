@@ -159,14 +159,14 @@ class QuizController extends AbstractController
                 // Ajoute la réponse à l'utilisateur
                 $user->addAnswer($answer);
                 // Persiste les modifications de l'utilisateur dans la base de données
-                $manager->persist($user);
-                // Enregistre les changements dans la base de données
-                $manager->flush();
-                // Ajoute un message flash d'avertissement
-                $this->addFlash('success', 'Merci d\'avoir répondu aux questions. Je vous contacterai dès que possible.');
-                // Redirige l'utilisateur vers la page d'accueil
-                return $this->redirectToRoute('app_home');
             }
+            $manager->persist($user);
+            // Enregistre les changements dans la base de données
+            $manager->flush();
+            // Ajoute un message flash d'avertissement
+            $this->addFlash('success', 'Merci d\'avoir répondu aux questions. Je vous contacterai dès que possible.');
+            // Redirige l'utilisateur vers la page d'accueil
+            return $this->redirectToRoute('app_home');
         }
         // Rendu de la vue pour le quiz "PC"
         return $this->render('quiz/pc.html.twig', [
