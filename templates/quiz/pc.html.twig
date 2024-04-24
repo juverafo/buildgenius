@@ -35,26 +35,4 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.getElementById('quizForm').addEventListener('submit', function(event) {
-            var questions = document.querySelectorAll('[class^=question-]');
-            var answeredQuestions = {};
-
-            questions.forEach(function(question) {
-                var questionId = question.classList[1].replace('question-', '');
-                var selectedAnswer = question.querySelector('input[type="radio"]:checked');
-                if (selectedAnswer) {
-                    answeredQuestions[questionId] = true;
-                }
-            });
-
-            for (var questionId in answeredQuestions) {
-                if (!answeredQuestions[questionId]) {
-                    event.preventDefault(); // Empêche la soumission du formulaire
-                    alert('Veuillez répondre à toutes les questions.');
-                    return;
-                }
-            }
-        });
-    </script>
 {% endblock %}

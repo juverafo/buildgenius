@@ -9,7 +9,6 @@
             <div class="col-md-6 flex flex-column">
                 {% for image in product.medias %} {# Boucle sur chaque image associée au produit #}
                 <img src="{{ asset('upload/'~image.src) }}" class="img-thumbnail mt-1" width="100" alt="Image du produit">
-                {# Affiche chaque image avec un lien pour changer l'image principale #}
                 {% endfor %}
             </div>
         </div>
@@ -23,19 +22,5 @@
             <p>{{ product.description }}</p> {# Affiche la description du produit #}
         </div>
     </div>
-    
-
-    <script>
-        let gallery = document.querySelectorAll(".img-thumbnail");
-
-        let preview = document.getElementById('preview'); // Sélectionne l'élément avec l'ID 'image'
-        for (let i = 0; i < gallery.length; i++){
-            let imgSrc = gallery[i]
-            imgSrc.addEventListener('click', e => {
-                preview.src = "";
-                preview.src = e.target.src
-            })
-        }
-    </script> 
 
 {% endblock %} 
