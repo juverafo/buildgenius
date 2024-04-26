@@ -44,7 +44,7 @@ class CategoryController extends AbstractController
             // Récupération des données du formulaire.
             $category = $form->getData();
  
-            // Persistation des données en base de données.
+            // Persister des données en base de données.
             $manager->persist($category);
  
             // Exécution de la transaction.

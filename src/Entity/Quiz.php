@@ -6,6 +6,7 @@ use App\Repository\QuizRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: QuizRepository::class)]
 class Quiz
@@ -16,6 +17,8 @@ class Quiz
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min: 3, max: 20)]
     private ?string $type = null;
 
     #[ORM\OneToMany(targetEntity: Question::class, mappedBy: 'quiz')]
