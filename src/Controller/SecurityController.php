@@ -9,6 +9,7 @@ use App\Repository\UserRepository;
 use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -18,9 +19,22 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 #[Route('/security')]
 class SecurityController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+    
     #[Route('/signup', name: 'app_signup')]
     public function signup(EntityManagerInterface $manager, Request $request, UserPasswordHasherInterface $passwordHasher, EmailService $emailService): Response
     {
+        // Vérifie si l'utilisateur est déjà authentifié
+        if ($this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+            // Redirige vers une autre page (par exemple, la page d'accueil)
+            return $this->redirectToRoute('app_home');
+        }
+
         // Création d'une nouvelle instance de l'entité User
         $user = new User();
 
@@ -101,6 +115,10 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+        if ($this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+            // Redirige vers une autre page (par exemple, la page d'accueil)
+            return $this->redirectToRoute('app_home');
+        }
        // Gestion de la connexion utilisateur
         // Récupération des erreurs de connexion
         $error = $authenticationUtils->getLastAuthenticationError();
