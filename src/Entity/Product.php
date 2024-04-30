@@ -34,7 +34,7 @@ class Product
     #[ORM\Column(type: 'float')]
     private ?float $price = null;
 
-    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'product', cascade: ['remove'])]
+    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
     private Collection $medias;
 
     public function __construct()
@@ -148,5 +148,4 @@ class Product
 
         return $this;
     }
-
 }
