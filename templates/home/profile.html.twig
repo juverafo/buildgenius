@@ -1,6 +1,7 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
+<div class="container my-3">
   {% if app.user %}
         <p>Les commandes passées de <b>{{ user.email }}</b> :</p>
     {% for orderPurchase in app.user.orderPurchases %}
@@ -18,5 +19,5 @@
       {% endfor %}
     {% endfor %}
   {% endif %}
-  
+  </div>
 {% endblock %}
