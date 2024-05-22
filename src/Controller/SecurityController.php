@@ -137,7 +137,7 @@ class SecurityController extends AbstractController
     {
         // Cette méthode sera interceptée par la configuration de sécurité pour gérer la déconnexion
         // Il n'est pas nécessaire de l'implémenter, mais doit être déclarée dans les routes pour fonctionner correctement
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        // throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
     // Méthode pour la réinitialisation du mot de passe
